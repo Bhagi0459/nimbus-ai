@@ -1,0 +1,35 @@
+<div class="dashboard-background" [class.rainy]="backgroundClass() === 'rainy'"
+    [class.sunny]="backgroundClass() === 'sunny'" [class.cloudy]="backgroundClass() === 'cloudy'"
+    [class.default]="backgroundClass() === 'default'"></div>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<div class="weather-dashboard">
+
+    <div class="dashboard-container">
+
+        <div class="dashboard-header">
+            <h1>Nimbus AI</h1>
+            <p>Your intelligent weather companion</p>
+        </div>
+
+        <div class="dashboard-content">
+
+            <app-weather-hero [temperature]="temperature()" [city]="city()" [condition]="condition()" />
+
+            <div class="stats-grid">
+
+                @for (stat of stats(); track stat.label) {
+
+                <app-stat-card [label]="stat.label" [value]="stat.value" />
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
