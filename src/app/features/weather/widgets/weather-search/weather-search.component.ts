@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-weather-search',
@@ -11,6 +11,8 @@ export class WeatherSearchComponent {
   readonly cityName = signal('');
 
   readonly search = output<string>();
+
+  readonly isLoading = input(false);
 
   updateCity(event: Event): void {
     const input = event.target as HTMLInputElement;

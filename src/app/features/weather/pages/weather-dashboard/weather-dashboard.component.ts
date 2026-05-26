@@ -20,6 +20,8 @@ export class WeatherDashboardComponent {
   readonly condition = signal('sunny');
   private readonly weatherService = inject(WeatherService);
 
+  readonly isLoading = signal(false);
+
   readonly stats = signal([
     {
       label: 'Humidity',
@@ -57,8 +59,10 @@ export class WeatherDashboardComponent {
     return 'default';
   });
 
-  searchCity(city: string): void {
-    const weatherData = this.weatherService.getWeatherByCity(city);
+  async searchCity(city: string): Promise<void> {
+    this.isLoading.set(true);
+
+    const weatherData = await this.weatherService.getWeatherByCity(city);
 
     this.city.set(weatherData.city);
 
@@ -67,5 +71,7 @@ export class WeatherDashboardComponent {
     this.condition.set(weatherData.condition);
 
     this.stats.set(weatherData.stats);
+
+    this.isLoading.set(false);
   }
 }

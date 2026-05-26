@@ -6,8 +6,12 @@ import { WeatherData } from '../models/weather.model';
   providedIn: 'root',
 })
 export class WeatherService {
-  getWeatherByCity(city: string): WeatherData {
+  async getWeatherByCity(city: string): Promise<WeatherData> {
     const normalizedCity = city.toLowerCase();
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+    });
 
     if (normalizedCity === 'mumbai') {
       return {

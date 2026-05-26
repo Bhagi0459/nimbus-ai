@@ -1,10 +1,20 @@
 <div class="search-container">
 
     <input type="text" placeholder="Search city..." [value]="cityName()" (input)="updateCity($event)"
-        (keyup.enter)="searchCity()" />
+        (keyup.enter)="searchCity()" [disabled]="isLoading()" />
 
-    <button (click)="searchCity()">
+    <button (click)="searchCity()" [disabled]="isLoading()">
+
+        @if (isLoading()) {
+
+        Loading...
+
+        } @else {
+
         Search
+
+        }
+
     </button>
 
 </div>

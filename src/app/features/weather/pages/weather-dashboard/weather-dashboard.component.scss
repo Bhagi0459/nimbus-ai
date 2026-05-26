@@ -200,3 +200,15 @@
         grid-template-columns: 1fr;
     }
 }
+
+button:disabled {
+    opacity: 0.7;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+input:disabled {
+    opacity: 0.7;
+}
