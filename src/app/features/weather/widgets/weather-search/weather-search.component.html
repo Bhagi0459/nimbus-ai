@@ -1,0 +1,10 @@
+<div class="search-container">
+
+    <input type="text" placeholder="Search city..." [value]="cityName()" (input)="updateCity($event)"
+        (keyup.enter)="searchCity()" />
+
+    <button (click)="searchCity()">
+        Search
+    </button>
+
+</div>

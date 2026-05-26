@@ -14,6 +14,8 @@
             <p>Your intelligent weather companion</p>
         </div>
 
+        <app-weather-search (search)="searchCity($event)" />
+
         <div class="dashboard-content">
 
             <app-weather-hero [temperature]="temperature()" [city]="city()" [condition]="condition()" />

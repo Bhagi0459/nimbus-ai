@@ -1,12 +1,14 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 
 import { WeatherHeroComponent } from '../../widgets/weather-hero/weather-hero.component';
 import { StatCardComponent } from '../../widgets/stat-card/stat-card.component';
+import { WeatherSearchComponent } from '../../widgets/weather-search/weather-search.component';
+import { WeatherService } from '../../services/weather.service';
 
 @Component({
   selector: 'app-weather-dashboard',
   standalone: true,
-  imports: [WeatherHeroComponent, StatCardComponent],
+  imports: [WeatherHeroComponent, WeatherSearchComponent, StatCardComponent],
   templateUrl: './weather-dashboard.component.html',
   styleUrl: './weather-dashboard.component.scss',
 })
@@ -16,6 +18,7 @@ export class WeatherDashboardComponent {
   readonly temperature = signal('28°C');
 
   readonly condition = signal('sunny');
+  private readonly weatherService = inject(WeatherService);
 
   readonly stats = signal([
     {
@@ -53,4 +56,16 @@ export class WeatherDashboardComponent {
 
     return 'default';
   });
+
+  searchCity(city: string): void {
+    const weatherData = this.weatherService.getWeatherByCity(city);
+
+    this.city.set(weatherData.city);
+
+    this.temperature.set(weatherData.temperature);
+
+    this.condition.set(weatherData.condition);
+
+    this.stats.set(weatherData.stats);
+  }
 }

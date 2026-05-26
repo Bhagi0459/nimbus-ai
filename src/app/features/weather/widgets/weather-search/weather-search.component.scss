@@ -1,0 +1,72 @@
+.search-container {
+    display: flex;
+
+    gap: 1rem;
+
+    margin-bottom: 2rem;
+}
+
+input {
+    flex: 1;
+
+    padding: 1rem 1.2rem;
+
+    border-radius: 16px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    outline: none;
+
+    font-size: 1rem;
+
+    backdrop-filter: blur(10px);
+
+    transition:
+        all 0.3s ease;
+}
+
+input:focus {
+    border:
+        1px solid rgba(255, 255, 255, 0.2);
+
+    background:
+        rgba(255, 255, 255, 0.12);
+}
+
+input::placeholder {
+    color:
+        rgba(255, 255, 255, 0.5);
+}
+
+button {
+    padding: 1rem 1.5rem;
+
+    border: none;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(135deg,
+            #3b82f6,
+            #8b5cf6);
+
+    color: white;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease;
+}
+
+button:hover {
+    transform:
+        translateY(-2px);
+}
