@@ -1,9 +1,21 @@
 <div class="hero-card">
 
+    @if (isLoading()) {
+
+    <div class="skeleton skeleton-temp"></div>
+
+    <div class="skeleton skeleton-city"></div>
+
+    <div class="skeleton skeleton-condition"></div>
+
+    } @else {
+
     <h2>{{ temperature() }}</h2>
 
     <h3>{{ city() }}</h3>
 
     <p>{{ condition() }}</p>
+
+    }
 
 </div>

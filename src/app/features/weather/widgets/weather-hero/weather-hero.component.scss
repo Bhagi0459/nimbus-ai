@@ -25,3 +25,50 @@
         opacity: 0.7;
     }
 }
+
+.skeleton {
+    border-radius: 12px;
+
+    background:
+        linear-gradient(90deg,
+            rgba(255, 255, 255, 0.08) 25%,
+            rgba(255, 255, 255, 0.16) 50%,
+            rgba(255, 255, 255, 0.08) 75%);
+
+    background-size: 200% 100%;
+
+    animation:
+        shimmer 1.5s infinite;
+}
+
+.skeleton-temp {
+    width: 220px;
+    height: 80px;
+
+    margin-bottom: 1rem;
+}
+
+.skeleton-city {
+    width: 180px;
+    height: 40px;
+
+    margin-bottom: 1rem;
+}
+
+.skeleton-condition {
+    width: 140px;
+    height: 20px;
+}
+
+@keyframes shimmer {
+
+    0% {
+        background-position:
+            200% 0;
+    }
+
+    100% {
+        background-position:
+            -200% 0;
+    }
+}

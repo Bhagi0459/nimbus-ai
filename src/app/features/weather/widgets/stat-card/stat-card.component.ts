@@ -10,4 +10,5 @@ import { Component, input } from '@angular/core';
 export class StatCardComponent {
   readonly label = input<string>();
   readonly value = input<string>();
+  readonly isLoading = input(false);
 }

@@ -1,7 +1,17 @@
 <div class="stat-card">
 
+    @if (isLoading()) {
+
+    <div class="skeleton skeleton-label"></div>
+
+    <div class="skeleton skeleton-value"></div>
+
+    } @else {
+
     <span>{{ label() }}</span>
 
     <h4>{{ value() }}</h4>
+
+    }
 
 </div>

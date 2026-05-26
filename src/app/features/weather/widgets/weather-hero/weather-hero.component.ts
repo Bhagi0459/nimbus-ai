@@ -11,4 +11,5 @@ export class WeatherHeroComponent {
   readonly temperature = input<string>();
   readonly city = input<string>();
   readonly condition = input<string>();
+  readonly isLoading = input(false);
 }
