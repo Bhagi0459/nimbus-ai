@@ -45,6 +45,16 @@ app.post(
 
         try {
 
+            response.setHeader(
+                'Content-Type',
+                'text/plain'
+            );
+
+            response.setHeader(
+                'Transfer-Encoding',
+                'chunked'
+            );
+
             const {
                 city,
                 temperature,
@@ -55,23 +65,35 @@ app.post(
 
             const prompt = `
 You are Nimbus AI,
-a premium weather assistant.
+a modern premium weather assistant.
 
 Generate a short,
-modern weather insight
-for the following data.
+natural weather insight.
 
-City: ${city}
-Temperature: ${temperature}
-Condition: ${condition}
-Humidity: ${humidity}
-Wind: ${wind}
+Weather Data:
+- City: ${city}
+- Temperature: ${temperature}
+- Condition: ${condition}
+- Humidity: ${humidity}
+- Wind: ${wind}
 
-Keep response:
-- concise
-- premium sounding
-- human friendly
-- under 35 words
+Rules:
+- Maximum 2 short sentences
+- Sound calm, subtle, and modern
+- Keep tone observational, not advisory
+- Avoid recommendations unless necessary
+- Avoid generic positive conclusions
+- Avoid phrases like:
+  "perfect for outdoor activities"
+  "pleasant atmosphere"
+  "great weather"
+  "ideal conditions"
+- Avoid poetic or dramatic wording
+- Avoid weather reporter tone
+- Avoid filler sentences
+- Focus on atmosphere and overall feel
+- Keep wording concise and premium
+- Do not use quotation marks
 `;
 
             const completion =
@@ -79,31 +101,79 @@ Keep response:
                 await groq.chat.completions.create({
 
                     model:
-                        'llama3-8b-8192',
+                        'llama-3.3-70b-versatile',
 
                     messages: [
 
                         {
+                            role: 'system',
+
+                            content: `
+You are Nimbus AI,
+a modern weather assistant.
+
+Your tone should feel:
+- natural
+- calm
+- modern
+- subtle
+- human
+
+Avoid:
+- poetic language
+- dramatic descriptions
+- generic positivity
+- robotic summaries
+- weather reporter style
+
+Do not simply repeat raw weather data.
+
+Instead:
+briefly describe how the weather feels overall.
+
+Keep responses:
+- concise
+- conversational
+- observational
+- maximum 2 short sentences
+`,
+                        },
+
+                        {
                             role: 'user',
 
-                            content: prompt,
+                            content: `
+Weather Data:
+- City: ${city}
+- Temperature: ${temperature}
+- Condition: ${condition}
+- Humidity: ${humidity}
+- Wind: ${wind}
+
+Generate a concise weather insight.
+`,
                         },
                     ],
 
-                    temperature: 0.7,
+                    temperature: 0.3,
+
+                    stream: true,
                 });
 
-            const insight =
+            for await (
+                const chunk
+                of completion
+            ) {
 
-                completion
-                    .choices[0]
-                    .message
-                    .content;
+                const content =
 
-            response.json({
+                    chunk.choices[0]?.delta
+                        ?.content || '';
 
-                insight,
-            });
+                response.write(content);
+            }
+
+            response.end();
 
         } catch (error) {
 

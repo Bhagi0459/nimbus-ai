@@ -119,10 +119,17 @@ export class WeatherDashboardComponent {
 
     this.forecast.set(weatherData.forecast);
 
-    const insightResponse =
-      await this.weatherAiService.generateInsight(weatherData);
+    const insightResponse = this.streamedInsight.set('');
 
-    await this.streamInsight(insightResponse.summary);
+    await this.weatherAiService.generateInsight(
+      weatherData,
+
+      (chunk) => {
+        this.streamedInsight.update((current) => current + chunk);
+      },
+    );
+
+    this.isInsightLoading.set(false);
 
     this.isInsightLoading.set(false);
 

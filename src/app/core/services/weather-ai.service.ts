@@ -1,79 +1,64 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { WeatherData } from '../../features/weather/models/weather.model';
 import { WeatherInsight } from '../../features/weather/models/weather-insight.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WeatherAiService {
-  async generateInsight(weatherData: WeatherData): Promise<WeatherInsight> {
-    await this.simulateThinking();
+  private readonly http = inject(HttpClient);
 
-    const condition = weatherData.condition.toLowerCase();
+  async generateInsight(
+    weatherData: WeatherData,
 
-    const temperature = Number.parseFloat(weatherData.temperature);
+    onChunk: (chunk: string) => void,
+  ): Promise<void> {
+    const humidity =
+      weatherData.stats.find((stat) => stat.label === 'Humidity')?.value || '';
 
-    const humidity = Number.parseFloat(
-      weatherData.stats.find((stat) => stat.label === 'Humidity')?.value || '0',
+    const wind =
+      weatherData.stats.find((stat) => stat.label === 'Wind')?.value || '';
+
+    const response = await fetch(
+      'http://localhost:3000/weather-insight',
+
+      {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+          city: weatherData.city,
+
+          temperature: weatherData.temperature,
+
+          condition: weatherData.condition,
+
+          humidity,
+
+          wind,
+        }),
+      },
     );
 
-    if (condition.includes('rain')) {
-      return {
-        severity: 'medium',
+    const reader = response.body?.getReader();
 
-        summary: `
-          Rainy conditions expected.
-          Carry an umbrella and
-          expect slower commutes.
-          `,
-      };
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const result = await reader?.read();
+
+      if (!result || result.done) {
+        break;
+      }
+
+      const chunk = decoder.decode(result.value);
+
+      onChunk(chunk);
     }
-
-    if (temperature >= 35) {
-      return {
-        severity: 'high',
-
-        summary: `
-          High temperatures detected.
-          Stay hydrated and avoid
-          prolonged afternoon exposure.
-          `,
-      };
-    }
-
-    if (humidity >= 75) {
-      return {
-        severity: 'medium',
-
-        summary: `
-          Humidity levels are elevated.
-          It may feel warmer than
-          the reported temperature.
-          `,
-      };
-    }
-
-    if (condition.includes('cloud')) {
-      return {
-        severity: 'low',
-
-        summary: `
-          Cloud cover may create
-          cooler and softer daylight
-          conditions throughout the day.
-          `,
-      };
-    }
-
-    return {
-      severity: 'low',
-
-      summary: `
-        Weather conditions look stable.
-        Great time for outdoor plans
-        and light travel activity.
-        `,
-    };
   }
 
   private async simulateThinking(): Promise<void> {
