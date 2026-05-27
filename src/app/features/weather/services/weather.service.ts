@@ -33,6 +33,8 @@ export class WeatherService {
 
       conditionIcon: `https:${response.current.condition.icon}`,
 
+      localTime: response.location.localtime,
+
       stats: [
         {
           label: 'Humidity',

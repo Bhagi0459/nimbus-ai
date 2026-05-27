@@ -20,11 +20,27 @@
                 Feels like {{ feelsLike() }}
             </p>
 
-            <h3>{{ city() }}</h3>
+            <div class="hero-meta">
 
-            <p class="condition">
-                {{ condition() }}
-            </p>
+                <p class="greeting">
+                    {{ greeting() }}
+                </p>
+
+                <h3>{{ city() }}</h3>
+
+                <div class="condition-pill">
+
+                    <span>
+                        {{ condition() }}
+                    </span>
+
+                </div>
+
+                <p class="local-time">
+                    {{ localTime() }}
+                </p>
+
+            </div>
 
         </div>
 

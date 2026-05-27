@@ -26,6 +26,8 @@ export class WeatherDashboardComponent {
 
   readonly conditionIcon = signal('');
 
+  readonly localTime = signal('');
+
   readonly stats = signal([
     {
       label: 'Humidity',
@@ -86,6 +88,46 @@ export class WeatherDashboardComponent {
 
     this.conditionIcon.set(weatherData.conditionIcon);
 
+    this.localTime.set(weatherData.localTime);
+
     this.isLoading.set(false);
   }
+
+  readonly greeting = computed(() => {
+    if (!this.localTime()) {
+      return '';
+    }
+
+    const date = new Date(this.localTime());
+
+    const hour = date.getHours();
+
+    if (hour < 12) {
+      return 'Good Morning';
+    }
+
+    if (hour < 18) {
+      return 'Good Afternoon';
+    }
+
+    return 'Good Evening';
+  });
+
+  readonly formattedLocalTime = computed(() => {
+    if (!this.localTime()) {
+      return '';
+    }
+
+    const date = new Date(this.localTime());
+
+    return date.toLocaleString('en-US', {
+      weekday: 'long',
+
+      hour: 'numeric',
+
+      minute: '2-digit',
+
+      hour12: true,
+    });
+  });
 }

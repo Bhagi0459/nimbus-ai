@@ -14,4 +14,6 @@ export class WeatherHeroComponent {
   readonly isLoading = input(false);
   readonly feelsLike = input('');
   readonly conditionIcon = input('');
+  readonly localTime = input('');
+  readonly greeting = input('');
 }

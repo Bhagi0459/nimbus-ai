@@ -19,7 +19,8 @@
         <div class="dashboard-content">
 
             <app-weather-hero [temperature]="temperature()" [feelsLike]="feelsLike()" [conditionIcon]="conditionIcon()"
-                [city]="city()" [condition]="condition()" [isLoading]="isLoading()" />
+                [city]="city()" [condition]="condition()" [localTime]="formattedLocalTime()" [greeting]="greeting()"
+                [isLoading]="isLoading()" />
 
             <div class="stats-grid">
 
