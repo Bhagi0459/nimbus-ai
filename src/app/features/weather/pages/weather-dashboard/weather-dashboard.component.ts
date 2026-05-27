@@ -7,11 +7,19 @@ import { WeatherService } from '../../services/weather.service';
 import { CitySuggestion } from '../../models/city-suggestion.model';
 import { ForecastHour } from '../../models/forecast-hour.model';
 import { ForecastTimelineComponent } from '../../widgets/forecast-timeline/forecast-timeline.component';
+import { WeatherData } from '../../models/weather.model';
+import { WeatherInsightComponent } from '../../widgets/weather-insight/weather-insight.component';
 
 @Component({
   selector: 'app-weather-dashboard',
   standalone: true,
-  imports: [WeatherHeroComponent, WeatherSearchComponent, StatCardComponent, ForecastTimelineComponent],
+  imports: [
+    WeatherHeroComponent,
+    WeatherSearchComponent,
+    StatCardComponent,
+    ForecastTimelineComponent,
+    WeatherInsightComponent,
+  ],
   templateUrl: './weather-dashboard.component.html',
   styleUrl: './weather-dashboard.component.scss',
 })
@@ -37,6 +45,8 @@ export class WeatherDashboardComponent {
 
   readonly forecast = signal<ForecastHour[]>([]);
 
+  readonly insight = signal('');
+
   readonly stats = signal([
     {
       label: 'Humidity',
@@ -59,22 +69,24 @@ export class WeatherDashboardComponent {
   readonly backgroundClass = computed(() => {
     const condition = this.condition().toLowerCase();
 
-    const sunnyConditions = ['sunny', 'clear'];
-
-    const cloudyConditions = ['cloud', 'mist', 'fog', 'overcast'];
-
-    const rainyConditions = ['rain', 'drizzle', 'thunder'];
-
-    if (sunnyConditions.some((item) => condition.includes(item))) {
-      return 'sunny';
+    if (
+      condition.includes('rain') ||
+      condition.includes('drizzle') ||
+      condition.includes('thunder')
+    ) {
+      return 'rainy';
     }
 
-    if (cloudyConditions.some((item) => condition.includes(item))) {
+    if (
+      condition.includes('cloud') ||
+      condition.includes('mist') ||
+      condition.includes('fog')
+    ) {
       return 'cloudy';
     }
 
-    if (rainyConditions.some((item) => condition.includes(item))) {
-      return 'rainy';
+    if (condition.includes('sun') || condition.includes('clear')) {
+      return 'sunny';
     }
 
     return 'default';
@@ -102,6 +114,8 @@ export class WeatherDashboardComponent {
     this.suggestions.set([]);
 
     this.forecast.set(weatherData.forecast);
+
+    this.insight.set(this.generateInsight(weatherData));
 
     this.isLoading.set(false);
   }
@@ -158,5 +172,53 @@ export class WeatherDashboardComponent {
 
       this.suggestions.set(suggestions);
     }, 400);
+  }
+
+  private generateInsight(weatherData: WeatherData): string {
+    const condition = weatherData.condition.toLowerCase();
+
+    const temperature = Number.parseFloat(weatherData.temperature);
+
+    const humidity = Number.parseFloat(
+      weatherData.stats.find((stat) => stat.label === 'Humidity')?.value || '0',
+    );
+
+    if (condition.includes('rain')) {
+      return `
+      Rainy conditions expected.
+      Carry an umbrella and
+      expect slower commutes.
+    `;
+    }
+
+    if (temperature >= 35) {
+      return `
+      High temperatures detected.
+      Stay hydrated and avoid
+      prolonged afternoon exposure.
+    `;
+    }
+
+    if (humidity >= 75) {
+      return `
+      Humidity levels are elevated.
+      It may feel warmer than
+      the reported temperature.
+    `;
+    }
+
+    if (condition.includes('cloud')) {
+      return `
+      Cloud cover may create
+      cooler and softer daylight
+      conditions through the day.
+    `;
+    }
+
+    return `
+    Weather conditions look stable.
+    Great time for outdoor plans
+    and light travel activity.
+  `;
   }
 }

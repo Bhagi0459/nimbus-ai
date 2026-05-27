@@ -1,20 +1,17 @@
-<div class="dashboard-background" [class.rainy]="
-        backgroundClass() === 'rainy'
-    " [class.sunny]="
-        backgroundClass() === 'sunny'
-    " [class.cloudy]="
-        backgroundClass() === 'cloudy'
-    " [class.default]="
-        backgroundClass() === 'default'
-    ">
+<div class="dashboard-background">
 
     <div class="glow glow-1"></div>
 
     <div class="glow glow-2"></div>
-
 </div>
 
-<div class="weather-dashboard">
+<div class="weather-dashboard" [class.loading-transition]="isLoading()" [class.sunny-atmosphere]="
+        backgroundClass() === 'sunny'
+    " [class.cloudy-atmosphere]="
+        backgroundClass() === 'cloudy'
+    " [class.rainy-atmosphere]="
+        backgroundClass() === 'rainy'
+    ">
 
     <div class="dashboard-top">
 
@@ -38,6 +35,8 @@
         <app-forecast-timeline [forecast]="forecast()" />
 
     </div>
+
+    <app-weather-insight [insight]="insight()" />
 
     <div class="dashboard-stats">
 
