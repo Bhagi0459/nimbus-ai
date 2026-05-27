@@ -13,4 +13,5 @@ import { Component, input } from '@angular/core';
 })
 export class WeatherInsightComponent {
   readonly insight = input('');
+  readonly isLoading = input(false);
 }

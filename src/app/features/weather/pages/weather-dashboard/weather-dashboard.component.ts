@@ -9,6 +9,7 @@ import { ForecastHour } from '../../models/forecast-hour.model';
 import { ForecastTimelineComponent } from '../../widgets/forecast-timeline/forecast-timeline.component';
 import { WeatherData } from '../../models/weather.model';
 import { WeatherInsightComponent } from '../../widgets/weather-insight/weather-insight.component';
+import { WeatherAiService } from '../../../../core/services/weather-ai.service';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -45,7 +46,10 @@ export class WeatherDashboardComponent {
 
   readonly forecast = signal<ForecastHour[]>([]);
 
-  readonly insight = signal('');
+  readonly streamedInsight = signal('');
+
+  readonly isInsightLoading = signal(false);
+  private readonly weatherAiService = inject(WeatherAiService);
 
   readonly stats = signal([
     {
@@ -94,7 +98,7 @@ export class WeatherDashboardComponent {
 
   async searchCity(city: string): Promise<void> {
     this.isLoading.set(true);
-
+    this.isInsightLoading.set(true);
     const weatherData = await this.weatherService.getWeatherByCity(city);
 
     this.city.set(weatherData.city);
@@ -115,7 +119,12 @@ export class WeatherDashboardComponent {
 
     this.forecast.set(weatherData.forecast);
 
-    this.insight.set(this.generateInsight(weatherData));
+    const insightResponse =
+      await this.weatherAiService.generateInsight(weatherData);
+
+    await this.streamInsight(insightResponse.summary);
+
+    this.isInsightLoading.set(false);
 
     this.isLoading.set(false);
   }
@@ -174,51 +183,61 @@ export class WeatherDashboardComponent {
     }, 400);
   }
 
-  private generateInsight(weatherData: WeatherData): string {
-    const condition = weatherData.condition.toLowerCase();
+  // private generateInsight(weatherData: WeatherData): string {
+  //   const condition = weatherData.condition.toLowerCase();
 
-    const temperature = Number.parseFloat(weatherData.temperature);
+  //   const temperature = Number.parseFloat(weatherData.temperature);
 
-    const humidity = Number.parseFloat(
-      weatherData.stats.find((stat) => stat.label === 'Humidity')?.value || '0',
-    );
+  //   const humidity = Number.parseFloat(
+  //     weatherData.stats.find((stat) => stat.label === 'Humidity')?.value || '0',
+  //   );
 
-    if (condition.includes('rain')) {
-      return `
-      Rainy conditions expected.
-      Carry an umbrella and
-      expect slower commutes.
-    `;
+  //   if (condition.includes('rain')) {
+  //     return `
+  //     Rainy conditions expected.
+  //     Carry an umbrella and
+  //     expect slower commutes.
+  //   `;
+  //   }
+
+  //   if (temperature >= 35) {
+  //     return `
+  //     High temperatures detected.
+  //     Stay hydrated and avoid
+  //     prolonged afternoon exposure.
+  //   `;
+  //   }
+
+  //   if (humidity >= 75) {
+  //     return `
+  //     Humidity levels are elevated.
+  //     It may feel warmer than
+  //     the reported temperature.
+  //   `;
+  //   }
+
+  //   if (condition.includes('cloud')) {
+  //     return `
+  //     Cloud cover may create
+  //     cooler and softer daylight
+  //     conditions through the day.
+  //   `;
+  //   }
+
+  //   return `
+  //   Weather conditions look stable.
+  //   Great time for outdoor plans
+  //   and light travel activity.
+  // `;
+  // }
+
+  private async streamInsight(text: string): Promise<void> {
+    this.streamedInsight.set('');
+
+    for (let index = 0; index < text.length; index++) {
+      this.streamedInsight.update((current) => current + text[index]);
+
+      await new Promise((resolve) => setTimeout(resolve, 18));
     }
-
-    if (temperature >= 35) {
-      return `
-      High temperatures detected.
-      Stay hydrated and avoid
-      prolonged afternoon exposure.
-    `;
-    }
-
-    if (humidity >= 75) {
-      return `
-      Humidity levels are elevated.
-      It may feel warmer than
-      the reported temperature.
-    `;
-    }
-
-    if (condition.includes('cloud')) {
-      return `
-      Cloud cover may create
-      cooler and softer daylight
-      conditions through the day.
-    `;
-    }
-
-    return `
-    Weather conditions look stable.
-    Great time for outdoor plans
-    and light travel activity.
-  `;
   }
 }

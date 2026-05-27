@@ -4,8 +4,24 @@
         Nimbus AI Insight
     </div>
 
-    <p>
+    @if (isLoading()) {
+
+    <div class="thinking-state">
+
+        <div class="thinking-dot"></div>
+
+        <span>
+            Analyzing weather patterns...
+        </span>
+
+    </div>
+
+    } @else {
+
+    <p class="insight-text">
         {{ insight() }}
     </p>
+
+    }
 
 </div>
