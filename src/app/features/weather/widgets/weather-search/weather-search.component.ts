@@ -1,4 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
+import { CitySuggestion } from '../../models/city-suggestion.model';
 
 @Component({
   selector: 'app-weather-search',
@@ -14,10 +15,16 @@ export class WeatherSearchComponent {
 
   readonly isLoading = input(false);
 
+  readonly suggestions = input<CitySuggestion[]>([]);
+
+  readonly searchInputChange = output<string>();
+
   updateCity(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     this.cityName.set(input.value);
+
+    this.searchInputChange.emit(input.value);
   }
 
   searchCity(): void {
@@ -26,5 +33,11 @@ export class WeatherSearchComponent {
     }
 
     this.search.emit(this.cityName());
+  }
+
+  searchCityFromSuggestion(city: string): void {
+    this.cityName.set(city);
+
+    this.search.emit(city);
   }
 }

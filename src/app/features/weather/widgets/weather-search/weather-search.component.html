@@ -9,6 +9,37 @@
         <input type="text" placeholder="Search city..." [value]="cityName()" (input)="updateCity($event)"
             (keyup.enter)="searchCity()" [disabled]="isLoading()" />
 
+        @if (suggestions().length > 0) {
+
+        <div class="suggestions-dropdown">
+
+            @for (
+            suggestion of suggestions();
+            track suggestion.id
+            ) {
+
+            <div class="suggestion-item" (click)="
+                    searchCityFromSuggestion(
+                        suggestion.name
+                    )
+                ">
+
+                <strong>
+                    {{ suggestion.name }}
+                </strong>
+
+                <span>
+                    {{ suggestion.region }},
+                    {{ suggestion.country }}
+                </span>
+
+            </div>
+
+            }
+
+        </div>
+        }
+
     </div>
 
     <button (click)="searchCity()" [disabled]="isLoading()">

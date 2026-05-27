@@ -14,7 +14,8 @@
             <p>Your intelligent weather companion</p>
         </div>
 
-        <app-weather-search [isLoading]="isLoading()" (search)="searchCity($event)" />
+        <app-weather-search [isLoading]="isLoading()" [suggestions]="suggestions()" (search)="searchCity($event)"
+            (searchInputChange)="searchSuggestions($event)" />
 
         <div class="dashboard-content">
 

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { CitySuggestion } from '../models/city-suggestion.model';
 
 @Injectable({
   providedIn: 'root',
@@ -54,5 +55,31 @@ export class WeatherService {
         },
       ],
     };
+  }
+
+  async searchCities(query: string): Promise<CitySuggestion[]> {
+    if (!query.trim()) {
+      return [];
+    }
+
+    const response = await firstValueFrom(
+      this.http.get<any[]>(environment.weatherSearchApiUrl, {
+        params: {
+          key: environment.weatherApiKey,
+
+          q: query,
+        },
+      }),
+    );
+
+    return response.map((city) => ({
+      id: city.id,
+
+      name: city.name,
+
+      region: city.region,
+
+      country: city.country,
+    }));
   }
 }

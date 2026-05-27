@@ -4,6 +4,7 @@ import { WeatherHeroComponent } from '../../widgets/weather-hero/weather-hero.co
 import { StatCardComponent } from '../../widgets/stat-card/stat-card.component';
 import { WeatherSearchComponent } from '../../widgets/weather-search/weather-search.component';
 import { WeatherService } from '../../services/weather.service';
+import { CitySuggestion } from '../../models/city-suggestion.model';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -27,6 +28,8 @@ export class WeatherDashboardComponent {
   readonly conditionIcon = signal('');
 
   readonly localTime = signal('');
+
+  readonly suggestions = signal<CitySuggestion[]>([]);
 
   readonly stats = signal([
     {
@@ -90,6 +93,8 @@ export class WeatherDashboardComponent {
 
     this.localTime.set(weatherData.localTime);
 
+    this.suggestions.set([]);
+
     this.isLoading.set(false);
   }
 
@@ -130,4 +135,10 @@ export class WeatherDashboardComponent {
       hour12: true,
     });
   });
+
+  async searchSuggestions(query: string): Promise<void> {
+    const suggestions = await this.weatherService.searchCities(query);
+
+    this.suggestions.set(suggestions);
+  }
 }
