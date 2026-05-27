@@ -10,11 +10,31 @@
 
     } @else {
 
-    <h2>{{ temperature() }}</h2>
+    <div class="hero-main">
 
-    <h3>{{ city() }}</h3>
+        <div class="hero-left">
 
-    <p>{{ condition() }}</p>
+            <h2>{{ temperature() }}</h2>
+
+            <p class="feels-like">
+                Feels like {{ feelsLike() }}
+            </p>
+
+            <h3>{{ city() }}</h3>
+
+            <p class="condition">
+                {{ condition() }}
+            </p>
+
+        </div>
+
+        <div class="hero-right">
+
+            <img [src]="conditionIcon()" [alt]="condition()" />
+
+        </div>
+
+    </div>
 
     }
 

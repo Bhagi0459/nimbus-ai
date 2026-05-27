@@ -1,93 +1,54 @@
 import { Injectable } from '@angular/core';
-
 import { WeatherData } from '../models/weather.model';
+import { HttpClient } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WeatherService {
+  private readonly http = inject(HttpClient);
+
   async getWeatherByCity(city: string): Promise<WeatherData> {
-    const normalizedCity = city.toLowerCase();
+    const response = await firstValueFrom(
+      this.http.get<any>(environment.weatherApiUrl, {
+        params: {
+          key: environment.weatherApiKey,
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 2000);
-    });
-
-    if (normalizedCity === 'mumbai') {
-      return {
-        city: 'Mumbai',
-        temperature: '31°C',
-        condition: 'Sunny',
-
-        stats: [
-          {
-            label: 'Humidity',
-            value: '58%',
-          },
-          {
-            label: 'Wind',
-            value: '8 km/h',
-          },
-          {
-            label: 'UV Index',
-            value: '7',
-          },
-          {
-            label: 'Feels Like',
-            value: '35°C',
-          },
-        ],
-      };
-    }
-
-    if (normalizedCity === 'delhi') {
-      return {
-        city: 'Delhi',
-        temperature: '24°C',
-        condition: 'Cloudy',
-
-        stats: [
-          {
-            label: 'Humidity',
-            value: '76%',
-          },
-          {
-            label: 'Wind',
-            value: '14 km/h',
-          },
-          {
-            label: 'UV Index',
-            value: '3',
-          },
-          {
-            label: 'Feels Like',
-            value: '26°C',
-          },
-        ],
-      };
-    }
+          q: city,
+        },
+      }),
+    );
 
     return {
-      city: 'Hyderabad',
-      temperature: '28°C',
-      condition: 'Rainy',
+      city: response.location.name,
+
+      temperature: `${response.current.temp_c}°C`,
+
+      condition: response.current.condition.text,
+
+      feelsLike: `${response.current.feelslike_c}°C`,
+
+      conditionIcon: `https:${response.current.condition.icon}`,
 
       stats: [
         {
           label: 'Humidity',
-          value: '72%',
+          value: `${response.current.humidity}%`,
         },
         {
           label: 'Wind',
-          value: '12 km/h',
+          value: `${response.current.wind_kph} km/h`,
         },
         {
           label: 'UV Index',
-          value: '4',
+          value: `${response.current.uv}`,
         },
         {
           label: 'Feels Like',
-          value: '31°C',
+          value: `${response.current.feelslike_c}°C`,
         },
       ],
     };

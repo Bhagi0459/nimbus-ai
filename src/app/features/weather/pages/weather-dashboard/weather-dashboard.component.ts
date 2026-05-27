@@ -22,6 +22,10 @@ export class WeatherDashboardComponent {
 
   readonly isLoading = signal(false);
 
+  readonly feelsLike = signal('');
+
+  readonly conditionIcon = signal('');
+
   readonly stats = signal([
     {
       label: 'Humidity',
@@ -42,18 +46,24 @@ export class WeatherDashboardComponent {
   ]);
 
   readonly backgroundClass = computed(() => {
-    const currentCondition = this.condition().toLowerCase();
+    const condition = this.condition().toLowerCase();
 
-    if (currentCondition.includes('rain')) {
-      return 'rainy';
+    const sunnyConditions = ['sunny', 'clear'];
+
+    const cloudyConditions = ['cloud', 'mist', 'fog', 'overcast'];
+
+    const rainyConditions = ['rain', 'drizzle', 'thunder'];
+
+    if (sunnyConditions.some((item) => condition.includes(item))) {
+      return 'sunny';
     }
 
-    if (currentCondition.includes('cloud')) {
+    if (cloudyConditions.some((item) => condition.includes(item))) {
       return 'cloudy';
     }
 
-    if (currentCondition.includes('sun')) {
-      return 'sunny';
+    if (rainyConditions.some((item) => condition.includes(item))) {
+      return 'rainy';
     }
 
     return 'default';
@@ -71,6 +81,10 @@ export class WeatherDashboardComponent {
     this.condition.set(weatherData.condition);
 
     this.stats.set(weatherData.stats);
+
+    this.feelsLike.set(weatherData.feelsLike);
+
+    this.conditionIcon.set(weatherData.conditionIcon);
 
     this.isLoading.set(false);
   }

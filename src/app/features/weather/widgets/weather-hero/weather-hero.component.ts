@@ -12,4 +12,6 @@ export class WeatherHeroComponent {
   readonly city = input<string>();
   readonly condition = input<string>();
   readonly isLoading = input(false);
+  readonly feelsLike = input('');
+  readonly conditionIcon = input('');
 }
