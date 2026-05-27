@@ -1,3 +1,5 @@
+import { ForecastHour } from './forecast-hour.model';
+
 export interface WeatherData {
   city: string;
 
@@ -12,6 +14,8 @@ export interface WeatherData {
   localTime: string;
 
   stats: WeatherStat[];
+
+  forecast: ForecastHour[];
 }
 
 export interface WeatherStat {

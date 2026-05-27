@@ -1,16 +1,18 @@
-<div class="stat-card">
+<div class="metric-pill">
 
     @if (isLoading()) {
 
-    <div class="skeleton skeleton-label"></div>
-
-    <div class="skeleton skeleton-value"></div>
+    <div class="skeleton skeleton-pill"></div>
 
     } @else {
 
-    <span>{{ label() }}</span>
+    <div class="metric-label">
+        {{ label() }}
+    </div>
 
-    <h4>{{ value() }}</h4>
+    <div class="metric-value">
+        {{ value() }}
+    </div>
 
     }
 

@@ -36,6 +36,27 @@ export class WeatherService {
 
       localTime: response.location.localtime,
 
+      forecast: response.forecast.forecastday[0].hour
+
+        .filter((hour: any) => {
+          const hourTime = new Date(hour.time);
+
+          return hourTime.getTime() > Date.now();
+        })
+
+        .slice(0, 8)
+
+        .map((hour: any) => ({
+          time: new Date(hour.time).toLocaleString('en-US', {
+            hour: 'numeric',
+            hour12: true,
+          }),
+
+          temperature: `${hour.temp_c}°C`,
+
+          icon: `https:${hour.condition.icon}`,
+        })),
+
       stats: [
         {
           label: 'Humidity',

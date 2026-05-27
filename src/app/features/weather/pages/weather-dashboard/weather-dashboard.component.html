@@ -1,39 +1,54 @@
-<div class="dashboard-background" [class.rainy]="backgroundClass() === 'rainy'"
-    [class.sunny]="backgroundClass() === 'sunny'" [class.cloudy]="backgroundClass() === 'cloudy'"
-    [class.default]="backgroundClass() === 'default'"></div>
+<div class="dashboard-background" [class.rainy]="
+        backgroundClass() === 'rainy'
+    " [class.sunny]="
+        backgroundClass() === 'sunny'
+    " [class.cloudy]="
+        backgroundClass() === 'cloudy'
+    " [class.default]="
+        backgroundClass() === 'default'
+    ">
 
-<div class="glow glow-1"></div>
-<div class="glow glow-2"></div>
+    <div class="glow glow-1"></div>
+
+    <div class="glow glow-2"></div>
+
+</div>
 
 <div class="weather-dashboard">
 
-    <div class="dashboard-container">
-
-        <div class="dashboard-header">
-            <h1>Nimbus AI</h1>
-            <p>Your intelligent weather companion</p>
-        </div>
+    <div class="dashboard-top">
 
         <app-weather-search [isLoading]="isLoading()" [suggestions]="suggestions()" (search)="searchCity($event)"
-            (searchInputChange)="searchSuggestions($event)" />
+            (searchInputChange)="
+                searchSuggestions($event)
+            " />
 
-        <div class="dashboard-content">
+    </div>
 
-            <app-weather-hero [temperature]="temperature()" [feelsLike]="feelsLike()" [conditionIcon]="conditionIcon()"
-                [city]="city()" [condition]="condition()" [localTime]="formattedLocalTime()" [greeting]="greeting()"
-                [isLoading]="isLoading()" />
+    <div class="dashboard-hero">
 
-            <div class="stats-grid">
+        <app-weather-hero [temperature]="temperature()" [feelsLike]="feelsLike()" [conditionIcon]="conditionIcon()"
+            [city]="city()" [condition]="condition()" [localTime]="formattedLocalTime()" [greeting]="greeting()"
+            [isLoading]="isLoading()" />
 
-                @for (stat of stats(); track stat.label) {
+    </div>
 
-                <app-stat-card [label]="stat.label" [value]="stat.value" [isLoading]="isLoading()" />
+    <div class="dashboard-forecast">
 
-                }
+        <app-forecast-timeline [forecast]="forecast()" />
 
-            </div>
+    </div>
 
-        </div>
+    <div class="dashboard-stats">
+
+        @for (
+        stat of stats();
+        track stat.label
+        ) {
+
+        <app-stat-card [label]="stat.label" [value]="stat.value" [isLoading]="isLoading()" />
+
+        }
 
     </div>
 

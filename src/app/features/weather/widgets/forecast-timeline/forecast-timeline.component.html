@@ -1,0 +1,35 @@
+<div class="forecast-wrapper">
+
+    <div class="forecast-header">
+
+        <h3>
+            Hourly Forecast
+        </h3>
+
+    </div>
+
+    <div class="forecast-strip">
+
+        @for (
+        hour of forecast();
+        track hour.time
+        ) {
+
+        <div class="forecast-item">
+
+            <p class="forecast-time">
+                {{ hour.time }}
+            </p>
+
+            <img [src]="hour.icon" [alt]="hour.time" />
+
+            <h4 class="forecast-temp">
+                {{ hour.temperature }}
+            </h4>
+
+        </div>
+        }
+
+    </div>
+
+</div>

@@ -5,11 +5,13 @@ import { StatCardComponent } from '../../widgets/stat-card/stat-card.component';
 import { WeatherSearchComponent } from '../../widgets/weather-search/weather-search.component';
 import { WeatherService } from '../../services/weather.service';
 import { CitySuggestion } from '../../models/city-suggestion.model';
+import { ForecastHour } from '../../models/forecast-hour.model';
+import { ForecastTimelineComponent } from '../../widgets/forecast-timeline/forecast-timeline.component';
 
 @Component({
   selector: 'app-weather-dashboard',
   standalone: true,
-  imports: [WeatherHeroComponent, WeatherSearchComponent, StatCardComponent],
+  imports: [WeatherHeroComponent, WeatherSearchComponent, StatCardComponent, ForecastTimelineComponent],
   templateUrl: './weather-dashboard.component.html',
   styleUrl: './weather-dashboard.component.scss',
 })
@@ -30,6 +32,10 @@ export class WeatherDashboardComponent {
   readonly localTime = signal('');
 
   readonly suggestions = signal<CitySuggestion[]>([]);
+
+  private searchDebounceTimer?: ReturnType<typeof setTimeout>;
+
+  readonly forecast = signal<ForecastHour[]>([]);
 
   readonly stats = signal([
     {
@@ -95,6 +101,8 @@ export class WeatherDashboardComponent {
 
     this.suggestions.set([]);
 
+    this.forecast.set(weatherData.forecast);
+
     this.isLoading.set(false);
   }
 
@@ -136,9 +144,19 @@ export class WeatherDashboardComponent {
     });
   });
 
-  async searchSuggestions(query: string): Promise<void> {
-    const suggestions = await this.weatherService.searchCities(query);
+  searchSuggestions(query: string): void {
+    clearTimeout(this.searchDebounceTimer);
 
-    this.suggestions.set(suggestions);
+    if (!query.trim()) {
+      this.suggestions.set([]);
+
+      return;
+    }
+
+    this.searchDebounceTimer = setTimeout(async () => {
+      const suggestions = await this.weatherService.searchCities(query);
+
+      this.suggestions.set(suggestions);
+    }, 400);
   }
 }
