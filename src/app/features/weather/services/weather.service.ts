@@ -36,6 +36,9 @@ export class WeatherService {
 
       localTime: response.location.localtime,
 
+      latitude: response.location.lat,
+      longitude: response.location.lon,
+
       forecast: response.forecast.forecastday[0].hour
 
         .filter((hour: any) => {

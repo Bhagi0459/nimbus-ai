@@ -16,6 +16,10 @@ export interface WeatherData {
   stats: WeatherStat[];
 
   forecast: ForecastHour[];
+
+  latitude: number;
+
+  longitude: number;
 }
 
 export interface WeatherStat {

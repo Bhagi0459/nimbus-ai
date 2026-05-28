@@ -36,6 +36,7 @@
 
     </div>
     <app-temperature-chart [forecast]="forecast()" />
+    <app-weather-map [city]="city()" [latitude]="latitude()" [longitude]="longitude()" />
     <app-weather-insight [insight]="streamedInsight()" [isLoading]="isInsightLoading()" />
 
     <div class="dashboard-stats">

@@ -11,6 +11,7 @@ import { WeatherData } from '../../models/weather.model';
 import { WeatherInsightComponent } from '../../widgets/weather-insight/weather-insight.component';
 import { WeatherAiService } from '../../../../core/services/weather-ai.service';
 import { TemperatureChartComponent } from '../../widgets/temperature-chart/temperature-chart.component';
+import { WeatherMapComponent } from '../../widgets/weather-map/weather-map.component';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -21,7 +22,8 @@ import { TemperatureChartComponent } from '../../widgets/temperature-chart/tempe
     StatCardComponent,
     ForecastTimelineComponent,
     WeatherInsightComponent,
-    TemperatureChartComponent
+    TemperatureChartComponent,
+    WeatherMapComponent,
   ],
   templateUrl: './weather-dashboard.component.html',
   styleUrl: './weather-dashboard.component.scss',
@@ -41,6 +43,8 @@ export class WeatherDashboardComponent {
   readonly conditionIcon = signal('');
 
   readonly localTime = signal('');
+  readonly latitude = signal(17.385);
+  readonly longitude = signal(78.4867);
 
   readonly suggestions = signal<CitySuggestion[]>([]);
 
@@ -102,6 +106,9 @@ export class WeatherDashboardComponent {
     this.isLoading.set(true);
     this.isInsightLoading.set(true);
     const weatherData = await this.weatherService.getWeatherByCity(city);
+
+    this.latitude.set(weatherData.latitude);
+    this.longitude.set(weatherData.longitude);
 
     this.city.set(weatherData.city);
 
