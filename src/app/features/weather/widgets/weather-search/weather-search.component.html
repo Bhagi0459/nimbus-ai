@@ -1,59 +1,70 @@
-<div class="search-wrapper">
+<div class="search-shell">
 
-    <div class="search-input-container">
+    <div class="search-container">
 
-        <span class="search-icon">
-            🔍
-        </span>
+        <div class="search-input-wrapper">
 
-        <input type="text" placeholder="Search city..." [value]="cityName()" (input)="updateCity($event)"
-            (keyup.enter)="searchCity()" [disabled]="isLoading()" />
+            <span class="search-icon">
 
-        @if (suggestions().length > 0) {
+                ⌕
 
-        <div class="suggestions-dropdown">
+            </span>
 
-            @for (
-            suggestion of suggestions();
-            track suggestion.id
-            ) {
+            <input type="text" placeholder="Search city..." [value]="cityName()" (input)="updateCity($event)"
+                (keyup.enter)="searchCity()" [disabled]="isLoading()" />
 
-            <div class="suggestion-item" (click)="
-                    searchCityFromSuggestion(
-                        suggestion.name
-                    )
-                ">
+        </div>
 
-                <strong>
-                    {{ suggestion.name }}
-                </strong>
+        <button (click)="searchCity()" [disabled]="isLoading()">
 
-                <span>
-                    {{ suggestion.region }},
-                    {{ suggestion.country }}
-                </span>
+            @if (isLoading()) {
 
-            </div>
+            Loading...
+
+            } @else {
+
+            Search
 
             }
 
+        </button>
+
+    </div>
+
+    @if (suggestions().length > 0) {
+
+    <div class="suggestions-dropdown">
+
+        @for (
+        suggestion of suggestions();
+        track suggestion.id
+        ) {
+
+        <div class="suggestion-item" (click)="
+                searchCityFromSuggestion(
+                    suggestion.name
+                )
+            ">
+
+            <div class="suggestion-main">
+
+                {{ suggestion.name }}
+
+            </div>
+
+            <div class="suggestion-meta">
+
+                {{ suggestion.region }},
+                {{ suggestion.country }}
+
+            </div>
+
         </div>
+
         }
 
     </div>
 
-    <button (click)="searchCity()" [disabled]="isLoading()">
-
-        @if (isLoading()) {
-
-        Loading...
-
-        } @else {
-
-        Search
-
-        }
-
-    </button>
+    }
 
 </div>

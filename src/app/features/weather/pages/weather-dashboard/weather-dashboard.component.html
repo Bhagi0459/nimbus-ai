@@ -10,6 +10,7 @@
     <div class="rain-layer"></div>
 
     }
+
     @if (backgroundClass() === 'storm') {
 
     <div class="lightning-flash"></div>
@@ -40,51 +41,99 @@
 
 <div class="cursor-glow"></div>
 
-<div class="weather-dashboard" [class.loading-transition]="isLoading()" [class.sunny-atmosphere]="
-        backgroundClass() === 'sunny'
-    " [class.cloudy-atmosphere]="
-        backgroundClass() === 'cloudy'
-    " [class.rainy-atmosphere]="
-        backgroundClass() === 'rainy'
-    ">
+<div class="weather-dashboard" [class.loading-transition]="isLoading()">
 
-    <div class="dashboard-top">
+    <!-- SEARCH -->
+
+    <div class="dashboard-search">
 
         <app-weather-search [isLoading]="isLoading()" [suggestions]="suggestions()" (search)="searchCity($event)"
-            (searchInputChange)="
-                searchSuggestions($event)
-            " />
+            (searchInputChange)="searchSuggestions($event)" />
 
     </div>
 
-    <div class="dashboard-hero">
+    <!-- TOP GRID -->
 
-        <app-weather-hero [temperature]="temperature()" [feelsLike]="feelsLike()" [conditionIcon]="conditionIcon()"
-            [city]="city()" [condition]="condition()" [localTime]="formattedLocalTime()" [greeting]="greeting()"
-            [isLoading]="isLoading()" />
+    <div class="top-grid">
+
+        <!-- LEFT -->
+
+        <div class="hero-section">
+
+            <div class="hero-stats-layout">
+
+                <!-- HERO -->
+
+                <div class="hero-panel">
+
+                    <app-weather-hero [temperature]="temperature()" [feelsLike]="feelsLike()"
+                        [conditionIcon]="conditionIcon()" [city]="city()" [condition]="condition()"
+                        [localTime]="formattedLocalTime()" [greeting]="greeting()" [isLoading]="isLoading()" />
+
+                </div>
+
+                <!-- STATS -->
+
+                <div class="stats-grid">
+
+                    @for (
+                    stat of stats();
+                    track stat.label
+                    ) {
+
+                    <app-stat-card [label]="stat.label" [value]="stat.value" [isLoading]="isLoading()" />
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="forecast-section">
+
+            <app-daily-forecast [forecast]="dailyForecast()" />
+
+        </div>
 
     </div>
 
-    <div class="dashboard-forecast">
+    <!-- MIDDLE -->
 
-        <app-forecast-timeline [forecast]="forecast()" />
+    <div class="middle-grid">
+
+        <div class="hourly-section">
+
+            <app-forecast-timeline [forecast]="forecast()" />
+
+        </div>
+
+        <div class="insight-section">
+
+            <app-weather-insight [insight]="streamedInsight()" [isLoading]="isInsightLoading()" />
+
+        </div>
 
     </div>
-    <app-daily-forecast [forecast]="dailyForecast()" />
-    <app-temperature-chart [forecast]="forecast()" />
-    <app-weather-map [city]="city()" [latitude]="latitude()" [longitude]="longitude()" />
-    <app-weather-insight [insight]="streamedInsight()" [isLoading]="isInsightLoading()" />
 
-    <div class="dashboard-stats">
+    <!-- BOTTOM -->
 
-        @for (
-        stat of stats();
-        track stat.label
-        ) {
+    <div class="bottom-grid">
 
-        <app-stat-card [label]="stat.label" [value]="stat.value" [isLoading]="isLoading()" />
+        <div class="chart-section">
 
-        }
+            <app-temperature-chart [forecast]="forecast()" />
+
+        </div>
+
+        <div class="map-section">
+
+            <app-weather-map [city]="city()" [latitude]="latitude()" [longitude]="longitude()" />
+
+        </div>
 
     </div>
 

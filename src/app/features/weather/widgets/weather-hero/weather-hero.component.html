@@ -1,61 +1,40 @@
-<!-- <div class="hero-card"> -->
-
 @if (isLoading()) {
 
-<div class="skeleton skeleton-temp"></div>
-
-<div class="skeleton skeleton-city"></div>
-
-<div class="skeleton skeleton-condition"></div>
+<div class="hero-skeleton">
+    <div class="skeleton skeleton-temp"></div>
+    <div class="skeleton skeleton-city"></div>
+    <div class="skeleton skeleton-condition"></div>
+</div>
 
 } @else {
 
 <div class="hero-layout">
-
     <div class="hero-content">
-
         <p class="hero-greeting">
             {{ greeting() }}
         </p>
-
         <h1 class="hero-temp">
             {{ temperature() }}
         </h1>
-
         <div class="hero-city-row">
-
             <h2 class="hero-city">
                 {{ city() }}
             </h2>
-
             <div class="hero-condition-pill">
-
                 {{ condition() }}
-
             </div>
-
         </div>
-
         <p class="hero-feels-like">
             Feels like {{ feelsLike() }}
         </p>
-
         <p class="hero-time">
             {{ localTime() }}
         </p>
-
     </div>
-
     <div class="hero-visual">
-
         <div class="weather-orb"></div>
-
         <img [src]="conditionIcon()" [alt]="condition()" />
-
     </div>
-
 </div>
 
 }
-
-<!-- </div> -->

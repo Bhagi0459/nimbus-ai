@@ -1,5 +1,4 @@
 import { Component, input } from '@angular/core';
-
 @Component({
   selector: 'app-weather-hero',
   standalone: true,

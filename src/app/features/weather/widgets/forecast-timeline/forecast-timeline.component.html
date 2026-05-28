@@ -6,28 +6,42 @@
             Hourly Forecast
         </h3>
 
+        <p>
+            Upcoming weather conditions
+        </p>
+
     </div>
 
     <div class="forecast-strip">
 
         @for (
         hour of forecast();
-        track hour.time
+        track hour.time;
+        let first = $first
         ) {
 
-        <div class="forecast-item">
+        <div class="forecast-item" [class.active-hour]="first">
 
             <p class="forecast-time">
+
                 {{ hour.time }}
+
             </p>
 
-            <img [src]="hour.icon" [alt]="hour.time" />
+            <div class="forecast-icon-wrapper">
+
+                <img [src]="hour.icon" [alt]="hour.time" />
+
+            </div>
 
             <h4 class="forecast-temp">
+
                 {{ hour.temperature }}
+
             </h4>
 
         </div>
+
         }
 
     </div>

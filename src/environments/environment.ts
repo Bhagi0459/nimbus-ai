@@ -6,4 +6,6 @@ export const environment = {
   weatherApiUrl: 'https://api.weatherapi.com/v1/forecast.json',
 
   weatherSearchApiUrl: 'https://api.weatherapi.com/v1/search.json',
+
+  aiApiUrl: 'http://localhost:3000',
 };

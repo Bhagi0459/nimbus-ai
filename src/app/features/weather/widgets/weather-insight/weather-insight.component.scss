@@ -1,12 +1,113 @@
+:host {
+
+    width: 100%;
+
+    display: block;
+}
+
+/* CARD */
+
 .insight-card {
-    max-width: 900px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    max-width: 980px;
 
     margin: 0 auto;
 
     padding:
-        1.4rem 1.6rem;
+        1.6rem 1.8rem;
 
-    border-radius: 28px;
+    border-radius: 30px;
+
+    background:
+        linear-gradient(135deg,
+            rgba(20, 28, 48, 0.92),
+            rgba(17, 24, 39, 0.88));
+
+    border:
+        1px solid rgba(255, 255, 255, 0.06);
+
+    backdrop-filter:
+        blur(24px);
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.24);
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.insight-card:hover {
+
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(96, 165, 250, 0.14);
+
+    box-shadow:
+        0 28px 60px rgba(0, 0, 0, 0.28);
+}
+
+/* BACKGROUND GLOW */
+
+.insight-card::before {
+
+    content: '';
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+
+        radial-gradient(circle at top right,
+            rgba(56, 189, 248, 0.08),
+            transparent 35%),
+
+        radial-gradient(circle at bottom left,
+            rgba(139, 92, 246, 0.08),
+            transparent 40%);
+
+    pointer-events: none;
+}
+
+/* HEADER */
+
+.insight-top {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 1.4rem;
+}
+
+/* BADGE */
+
+.insight-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.6rem;
+
+    padding:
+        0.55rem 0.9rem;
+
+    border-radius: 999px;
 
     background:
         rgba(255, 255, 255, 0.05);
@@ -14,113 +115,242 @@
     border:
         1px solid rgba(255, 255, 255, 0.06);
 
-    backdrop-filter:
-        blur(18px);
+    font-size: 0.82rem;
 
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.18);
+    font-weight: 650;
 
-    text-align: center;
+    color:
+        rgba(226, 232, 240, 0.92);
 
-    transition:
-        transform 0.3s ease,
-        background 0.3s ease;
+    letter-spacing: 0.3px;
 }
 
-.insight-card:hover {
-    transform:
-        translateY(-3px);
+.badge-dot {
 
-    background:
-        rgba(255, 255, 255, 0.07);
-}
+    width: 8px;
 
-.insight-label {
-    font-size: 0.85rem;
-
-    opacity: 0.55;
-
-    margin-bottom: 0.7rem;
-
-    letter-spacing: 0.5px;
-
-    text-transform: uppercase;
-}
-
-.insight-card p {
-    font-size: 1.05rem;
-
-    line-height: 1.7;
-
-    opacity: 0.9;
-}
-
-.thinking-state {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 0.8rem;
-
-    min-height: 60px;
-
-    opacity: 0.8;
-}
-
-.thinking-dot {
-    width: 10px;
-    height: 10px;
+    height: 8px;
 
     border-radius: 50%;
 
     background:
-        rgba(255, 255, 255, 0.8);
+        #38bdf8;
+
+    box-shadow:
+        0 0 12px rgba(56, 189, 248, 0.8);
 
     animation:
-        pulseThinking 1s ease-in-out infinite;
+        pulseDot 2s infinite;
 }
 
+/* STATUS */
+
+.insight-status {
+
+    font-size: 0.82rem;
+
+    color:
+        rgba(148, 163, 184, 0.72);
+
+    letter-spacing: 0.3px;
+}
+
+/* CONTENT */
+
+.insight-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    gap: 1rem;
+
+    align-items: flex-start;
+}
+
+/* QUOTE */
+
+.quote-mark {
+
+    font-size: 3rem;
+
+    line-height: 1;
+
+    color:
+        rgba(56, 189, 248, 0.28);
+
+    font-weight: 700;
+
+    margin-top: -0.3rem;
+}
+
+/* TEXT */
+
 .insight-text {
+
+    margin: 0;
+
+    font-size: 1.02rem;
+
+    line-height: 1.9;
+
+    color:
+        rgba(248, 250, 252, 0.92);
+
+    letter-spacing: 0.2px;
+
     animation:
         fadeInsight 0.5s ease;
 }
 
+/* THINKING STATE */
+
+.thinking-state {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    min-height: 90px;
+}
+
+.thinking-orb {
+
+    width: 18px;
+
+    height: 18px;
+
+    border-radius: 50%;
+
+    background:
+        #38bdf8;
+
+    box-shadow:
+        0 0 18px rgba(56, 189, 248, 0.7);
+
+    animation:
+        pulseThinking 1.2s infinite ease-in-out;
+}
+
+.thinking-content h4 {
+
+    margin: 0;
+
+    font-size: 1rem;
+
+    font-weight: 650;
+
+    color: #f8fafc;
+}
+
+.thinking-content p {
+
+    margin-top: 0.3rem;
+
+    font-size: 0.92rem;
+
+    color:
+        rgba(148, 163, 184, 0.74);
+}
+
+/* ANIMATIONS */
+
 @keyframes pulseThinking {
 
     0% {
+
         transform: scale(1);
 
         opacity: 0.5;
     }
 
     50% {
-        transform: scale(1.6);
+
+        transform: scale(1.5);
 
         opacity: 1;
     }
 
     100% {
+
         transform: scale(1);
 
         opacity: 0.5;
     }
 }
 
+@keyframes pulseDot {
+
+    0% {
+
+        opacity: 0.4;
+    }
+
+    50% {
+
+        opacity: 1;
+    }
+
+    100% {
+
+        opacity: 0.4;
+    }
+}
+
 @keyframes fadeInsight {
 
     from {
+
         opacity: 0;
 
         transform:
-            translateY(8px);
+            translateY(10px);
     }
 
     to {
+
         opacity: 1;
 
         transform:
             translateY(0);
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .insight-top {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 0.8rem;
+    }
+
+    .insight-content {
+
+        gap: 0.8rem;
+    }
+
+    .quote-mark {
+
+        font-size: 2.2rem;
+    }
+
+    .insight-text {
+
+        font-size: 0.96rem;
+
+        line-height: 1.75;
     }
 }

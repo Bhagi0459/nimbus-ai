@@ -31,15 +31,34 @@ export class WeatherMapComponent
 
   private map?: L.Map;
 
+  private marker?: L.Marker;
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.map && (changes['latitude'] || changes['longitude'])) {
-      this.map.setView([this.latitude(), this.longitude()], 10, {
+      const coordinates = [this.latitude(), this.longitude()] as [
+        number,
+        number,
+      ];
+
+      this.map.setView(coordinates, 10, {
         animate: true,
       });
 
+      this.marker?.setLatLng(coordinates);
+
+      this.marker?.bindPopup(
+        `
+          <div class="map-popup">
+            <strong>
+              ${this.city()}
+            </strong>
+          </div>
+        `,
+      );
+
       setTimeout(() => {
         this.map?.invalidateSize();
-      }, 200);
+      }, 250);
     }
   }
 
@@ -49,7 +68,7 @@ export class WeatherMapComponent
         this.initializeMap();
 
         this.map?.invalidateSize(true);
-      }, 300);
+      }, 250);
     });
   }
 
@@ -58,9 +77,11 @@ export class WeatherMapComponent
   }
 
   private initializeMap(): void {
+    const coordinates = [this.latitude(), this.longitude()] as [number, number];
+
     this.map = L.map('weather-map', {
       zoomControl: false,
-    }).setView([this.latitude(), this.longitude()], 10);
+    }).setView(coordinates, 10);
 
     L.tileLayer(
       'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
@@ -68,10 +89,6 @@ export class WeatherMapComponent
         attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
       },
     ).addTo(this.map);
-
-    setTimeout(() => {
-      this.map?.invalidateSize(true);
-    }, 500);
 
     const weatherIcon = L.divIcon({
       className: 'weather-marker',
@@ -81,21 +98,27 @@ export class WeatherMapComponent
           <div class="marker-core"></div>
         `,
 
-      iconSize: [26, 26],
+      iconSize: [30, 30],
 
-      iconAnchor: [13, 13],
+      iconAnchor: [15, 15],
     });
 
-    L.marker([this.latitude(), this.longitude()], {
+    this.marker = L.marker(coordinates, {
       icon: weatherIcon,
     })
       .addTo(this.map)
       .bindPopup(
         `
           <div class="map-popup">
-            <strong>${this.city()}</strong>
+            <strong>
+              ${this.city()}
+            </strong>
           </div>
         `,
       );
+
+    setTimeout(() => {
+      this.map?.invalidateSize(true);
+    }, 500);
   }
 }

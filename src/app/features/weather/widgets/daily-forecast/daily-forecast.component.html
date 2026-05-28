@@ -2,13 +2,23 @@
 
     <div class="forecast-header">
 
-        <h3>
-            7-Day Forecast
-        </h3>
+        <div>
 
-        <p>
-            Weekly weather outlook
-        </p>
+            <h3>
+                7-Day Forecast
+            </h3>
+
+            <p>
+                Weekly weather outlook
+            </p>
+
+        </div>
+
+        <div class="forecast-badge">
+
+            Predictive View
+
+        </div>
 
     </div>
 
@@ -16,46 +26,76 @@
 
         @for (
         day of forecast();
-        track day.day
+        track day.day;
+        let first = $first
         ) {
 
-        <div class="forecast-day">
+        <div class="forecast-day" [class.active-day]="first">
 
-            <div class="forecast-top">
+            <div class="day-top">
 
                 <span class="day-name">
-                    {{ day.day }}
+
+                    {{ first ? 'Today' : day.day }}
+
                 </span>
 
-                <img [src]="day.icon" [alt]="day.condition">
+                <div class="weather-icon-wrapper">
+
+                    <img [src]="day.icon" [alt]="day.condition">
+
+                </div>
 
             </div>
 
-            <div class="forecast-temp">
+            <div class="temperature-row">
 
                 <span class="max-temp">
+
                     {{ day.maxTemp }}
+
+                </span>
+
+                <span class="temp-divider">
+
+                    /
+
                 </span>
 
                 <span class="min-temp">
+
                     {{ day.minTemp }}
+
                 </span>
 
             </div>
 
-            <div class="forecast-condition">
+            <div class="condition-row">
 
                 {{ day.condition }}
 
             </div>
 
-            <div class="rain-chance">
+            <div class="rain-row">
 
-                🌧 {{ day.rainChance }}
+                <span class="rain-icon">
+
+                    🌧
+
+                </span>
+
+                <span>
+
+                    {{ day.rainChance }}
+
+                    rain chance
+
+                </span>
 
             </div>
 
         </div>
+
         }
 
     </div>

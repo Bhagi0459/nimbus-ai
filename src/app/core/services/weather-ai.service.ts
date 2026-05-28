@@ -1,29 +1,29 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+
 import { WeatherData } from '../../features/weather/models/weather.model';
-import { WeatherInsight } from '../../features/weather/models/weather-insight.model';
-import { HttpClient } from '@angular/common/http';
+
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WeatherAiService {
-  private readonly http = inject(HttpClient);
 
+  
   async generateInsight(
     weatherData: WeatherData,
 
     onChunk: (chunk: string) => void,
   ): Promise<void> {
-    const humidity =
-      weatherData.stats.find((stat) => stat.label === 'Humidity')?.value || '';
+    try {
+      const humidity =
+        weatherData.stats.find((stat) => stat.label === 'Humidity')?.value ||
+        '';
 
-    const wind =
-      weatherData.stats.find((stat) => stat.label === 'Wind')?.value || '';
+      const wind =
+        weatherData.stats.find((stat) => stat.label === 'Wind')?.value || '';
 
-    const response = await fetch(
-      'http://localhost:3000/weather-insight',
-
-      {
+      const response = await fetch(`${environment.aiApiUrl}/weather-insight`, {
         method: 'POST',
 
         headers: {
@@ -41,29 +41,35 @@ export class WeatherAiService {
 
           wind,
         }),
-      },
-    );
+      });
 
-    const reader = response.body?.getReader();
-
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const result = await reader?.read();
-
-      if (!result || result.done) {
-        break;
+      if (!response.ok) {
+        throw new Error('Failed to generate insight');
       }
 
-      const chunk = decoder.decode(result.value);
+      if (!response.body) {
+        throw new Error('Streaming not supported');
+      }
 
-      onChunk(chunk);
+      const reader = response.body.getReader();
+
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const result = await reader.read();
+
+        if (result.done) {
+          break;
+        }
+
+        const chunk = decoder.decode(result.value);
+
+        onChunk(chunk);
+      }
+    } catch (error) {
+      console.error('AI Insight Error:', error);
+
+      onChunk('Unable to generate weather insight right now.');
     }
-  }
-
-  private async simulateThinking(): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(resolve, 1200);
-    });
   }
 }

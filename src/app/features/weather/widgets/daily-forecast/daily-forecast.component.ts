@@ -10,7 +10,6 @@ import { DailyForecast } from '../../models/daily-forecast.model';
   standalone: true,
 
   imports: [CommonModule],
-
   templateUrl: './daily-forecast.component.html',
 
   styleUrl: './daily-forecast.component.scss',

@@ -68,7 +68,7 @@ export class TemperatureChartComponent {
   readonly chart = {
     type: 'line',
 
-    height: 280,
+    height: 240,
 
     parentHeightOffset: 0,
 
@@ -89,30 +89,14 @@ export class TemperatureChartComponent {
     },
 
     foreColor: '#ffffff',
-
-    // dropShadow: {
-    //   enabled: true,
-
-    //   top: 0,
-
-    //   left: 0,
-
-    //   blur: 8,
-
-    //   color: '#38bdf8',
-
-    //   opacity: 0.4,
-    // },
   } as ApexChart;
 
   readonly stroke = {
     curve: 'smooth' as const,
 
-    width: 4.5,
+    width: 3.8,
 
     lineCap: 'round',
-
-    colors: ['#7dd3fc'],
   } as ApexStroke;
 
   readonly tooltip = {
@@ -132,7 +116,7 @@ export class TemperatureChartComponent {
   } as ApexYAxis;
 
   readonly grid = {
-    borderColor: 'rgba(255,255,255,0.04)',
+    borderColor: 'rgba(255,255,255,0.018)',
 
     strokeDashArray: 5,
 
@@ -163,5 +147,5 @@ export class TemperatureChartComponent {
     },
   } as ApexStates;
 
-  // readonly colors = ['#60dfff'];
+  readonly colors = ['#7dd3fc'];
 }

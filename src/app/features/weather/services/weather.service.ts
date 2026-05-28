@@ -1,10 +1,18 @@
-import { Injectable } from '@angular/core';
-import { WeatherData } from '../models/weather.model';
+import { Injectable, inject } from '@angular/core';
+
 import { HttpClient } from '@angular/common/http';
-import { inject } from '@angular/core';
+
 import { firstValueFrom } from 'rxjs';
+
 import { environment } from '../../../../environments/environment';
+
+import { WeatherData } from '../models/weather.model';
+
 import { CitySuggestion } from '../models/city-suggestion.model';
+
+import { ForecastHour } from '../models/forecast-hour.model';
+
+import { DailyForecast } from '../models/daily-forecast.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +27,7 @@ export class WeatherService {
           key: environment.weatherApiKey,
 
           q: city,
+
           days: 7,
         },
       }),
@@ -38,63 +47,14 @@ export class WeatherService {
       localTime: response.location.localtime,
 
       latitude: response.location.lat,
+
       longitude: response.location.lon,
 
-      forecast: response.forecast.forecastday[0].hour
+      forecast: this.mapHourlyForecast(response),
 
-        .filter((hour: any) => {
-          const hourTime = new Date(hour.time);
+      dailyForecast: this.mapDailyForecast(response),
 
-          return hourTime.getTime() > Date.now();
-        })
-
-        // .slice(0, 8)
-
-        .map((hour: any) => ({
-          time: new Date(hour.time).toLocaleString('en-US', {
-            hour: 'numeric',
-            hour12: true,
-          }),
-
-          temperature: `${hour.temp_c}°C`,
-
-          icon: `https:${hour.condition.icon}`,
-        })),
-
-      stats: [
-        {
-          label: 'Humidity',
-          value: `${response.current.humidity}%`,
-        },
-        {
-          label: 'Wind',
-          value: `${response.current.wind_kph} km/h`,
-        },
-        {
-          label: 'UV Index',
-          value: `${response.current.uv}`,
-        },
-        {
-          label: 'Feels Like',
-          value: `${response.current.feelslike_c}°C`,
-        },
-      ],
-
-      dailyForecast: response.forecast.forecastday.map((day: any) => ({
-        day: new Date(day.date).toLocaleString('en-US', {
-          weekday: 'short',
-        }),
-
-        condition: day.day.condition.text,
-
-        icon: `https:${day.day.condition.icon}`,
-
-        maxTemp: `${day.day.maxtemp_c}°C`,
-
-        minTemp: `${day.day.mintemp_c}°C`,
-
-        rainChance: `${day.day.daily_chance_of_rain}%`,
-      })),
+      stats: this.mapStats(response),
     };
   }
 
@@ -122,5 +82,84 @@ export class WeatherService {
 
       country: city.country,
     }));
+  }
+
+  /* -------------------------------- */
+  /* HOURLY FORECAST */
+  /* -------------------------------- */
+
+  private mapHourlyForecast(response: any): ForecastHour[] {
+    return response.forecast.forecastday[0].hour
+
+      .filter((hour: any) => {
+        const hourTime = new Date(hour.time);
+
+        return hourTime.getTime() > Date.now();
+      })
+
+      .map((hour: any) => ({
+        time: new Date(hour.time).toLocaleString('en-US', {
+          hour: 'numeric',
+          hour12: true,
+        }),
+
+        temperature: `${hour.temp_c}°C`,
+
+        icon: `https:${hour.condition.icon}`,
+      }));
+  }
+
+  /* -------------------------------- */
+  /* DAILY FORECAST */
+  /* -------------------------------- */
+
+  private mapDailyForecast(response: any): DailyForecast[] {
+    return response.forecast.forecastday.map((day: any) => ({
+      day: new Date(day.date).toLocaleString('en-US', {
+        weekday: 'short',
+      }),
+
+      condition: day.day.condition.text,
+
+      icon: `https:${day.day.condition.icon}`,
+
+      maxTemp: `${day.day.maxtemp_c}°C`,
+
+      minTemp: `${day.day.mintemp_c}°C`,
+
+      rainChance: `${day.day.daily_chance_of_rain}%`,
+    }));
+  }
+
+  /* -------------------------------- */
+  /* WEATHER STATS */
+  /* -------------------------------- */
+
+  private mapStats(response: any) {
+    return [
+      {
+        label: 'Humidity',
+
+        value: `${response.current.humidity}%`,
+      },
+
+      {
+        label: 'Wind',
+
+        value: `${response.current.wind_kph} km/h`,
+      },
+
+      {
+        label: 'UV Index',
+
+        value: `${response.current.uv}`,
+      },
+
+      {
+        label: 'Feels Like',
+
+        value: `${response.current.feelslike_c}°C`,
+      },
+    ];
   }
 }

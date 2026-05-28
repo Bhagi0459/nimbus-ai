@@ -1,57 +1,154 @@
-.chart-card {
+:host {
+
     width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 1.2rem 1.4rem 0.2rem;
-    border-radius: 28px;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, rgba(20, 28, 48, 0.92), rgba(17, 24, 39, 0.88));
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(24px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+
+    display: block;
 }
+
+/* CARD */
+
+.chart-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding:
+        1.15rem 1.35rem 0.3rem;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(135deg,
+            rgba(20, 28, 48, 0.92),
+            rgba(17, 24, 39, 0.88));
+
+    border:
+        1px solid rgba(255, 255, 255, 0.05);
+
+    backdrop-filter:
+        blur(24px);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.24);
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+/* HOVER */
+
+.chart-card:hover {
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(96, 165, 250, 0.12);
+
+    box-shadow:
+        0 26px 60px rgba(0, 0, 0, 0.28);
+}
+
+/* ATMOSPHERIC GLOW */
 
 .chart-card::before {
+
     content: '';
+
     position: absolute;
+
     inset: 0;
-    background: radial-gradient(circle at top left, rgba(14, 165, 233, 0.14), transparent 42%), radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.14), transparent 40%);
-    filter: blur(18px);
+
+    background:
+
+        radial-gradient(circle at top left,
+            rgba(14, 165, 233, 0.12),
+            transparent 42%),
+
+        radial-gradient(circle at bottom right,
+            rgba(139, 92, 246, 0.10),
+            transparent 40%);
+
+    filter:
+        blur(18px);
+
     opacity: 0.9;
+
     pointer-events: none;
 }
+
+/* SOFT TOP LIGHT */
 
 .chart-card::after {
+
     content: '';
+
     position: absolute;
+
     inset: 0;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), transparent 30%);
+
+    background:
+        linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.025),
+            transparent 30%);
+
     pointer-events: none;
 }
 
+/* HEADER */
+
 .chart-header {
+
     position: relative;
+
     z-index: 2;
-    margin-bottom: 0.4rem;
+
+    margin-bottom: 0.15rem;
 }
 
 .chart-header h3 {
-    font-size: 1.28rem;
-    font-weight: 700;
+
     margin: 0;
-    color: #f8fafc;
+
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
     letter-spacing: -0.02em;
+
+    color: #f8fafc;
 }
 
 .chart-header p {
-    margin-top: 0.25rem;
-    font-size: 0.88rem;
-    color: rgba(148, 163, 184, 0.82);
+
+    margin-top: 0.22rem;
+
+    font-size: 0.84rem;
+
+    color:
+        rgba(148, 163, 184, 0.76);
+
     letter-spacing: 0.01em;
 }
 
+/* CHART */
+
 apx-chart {
+
+    position: relative;
+
+    z-index: 2;
+
     display: block;
-    margin-top: -0.45rem;
+
+    margin-top: -0.2rem;
 }
