@@ -10,6 +10,7 @@ import { ForecastTimelineComponent } from '../../widgets/forecast-timeline/forec
 import { WeatherData } from '../../models/weather.model';
 import { WeatherInsightComponent } from '../../widgets/weather-insight/weather-insight.component';
 import { WeatherAiService } from '../../../../core/services/weather-ai.service';
+import { TemperatureChartComponent } from '../../widgets/temperature-chart/temperature-chart.component';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -20,6 +21,7 @@ import { WeatherAiService } from '../../../../core/services/weather-ai.service';
     StatCardComponent,
     ForecastTimelineComponent,
     WeatherInsightComponent,
+    TemperatureChartComponent
   ],
   templateUrl: './weather-dashboard.component.html',
   styleUrl: './weather-dashboard.component.scss',
@@ -121,13 +123,23 @@ export class WeatherDashboardComponent {
 
     const insightResponse = this.streamedInsight.set('');
 
-    await this.weatherAiService.generateInsight(
-      weatherData,
+    try {
+      this.streamedInsight.set('');
 
-      (chunk) => {
-        this.streamedInsight.update((current) => current + chunk);
-      },
-    );
+      await this.weatherAiService.generateInsight(
+        weatherData,
+
+        (chunk) => {
+          this.streamedInsight.update((current) => current + chunk);
+        },
+      );
+    } catch (error) {
+      console.error(error);
+
+      this.streamedInsight.set('AI insight is temporarily unavailable.');
+    }
+
+    this.isInsightLoading.set(false);
 
     this.isInsightLoading.set(false);
 

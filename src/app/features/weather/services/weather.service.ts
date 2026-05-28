@@ -44,7 +44,7 @@ export class WeatherService {
           return hourTime.getTime() > Date.now();
         })
 
-        .slice(0, 8)
+        // .slice(0, 8)
 
         .map((hour: any) => ({
           time: new Date(hour.time).toLocaleString('en-US', {

@@ -179,11 +179,12 @@ Generate a concise weather insight.
 
             console.error(error);
 
-            response.status(500).json({
+            response.write(
 
-                error:
-                    'Failed to generate insight',
-            });
+                'AI insight is currently unavailable.'
+            );
+
+            response.end();
         }
     }
 );
