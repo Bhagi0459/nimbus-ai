@@ -1,3 +1,4 @@
+import { DailyForecast } from './daily-forecast.model';
 import { ForecastHour } from './forecast-hour.model';
 
 export interface WeatherData {
@@ -20,6 +21,8 @@ export interface WeatherData {
   latitude: number;
 
   longitude: number;
+
+  dailyForecast: DailyForecast[];
 }
 
 export interface WeatherStat {

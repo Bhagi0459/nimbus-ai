@@ -1,0 +1,63 @@
+<div class="daily-forecast-card">
+
+    <div class="forecast-header">
+
+        <h3>
+            7-Day Forecast
+        </h3>
+
+        <p>
+            Weekly weather outlook
+        </p>
+
+    </div>
+
+    <div class="forecast-scroll">
+
+        @for (
+        day of forecast();
+        track day.day
+        ) {
+
+        <div class="forecast-day">
+
+            <div class="forecast-top">
+
+                <span class="day-name">
+                    {{ day.day }}
+                </span>
+
+                <img [src]="day.icon" [alt]="day.condition">
+
+            </div>
+
+            <div class="forecast-temp">
+
+                <span class="max-temp">
+                    {{ day.maxTemp }}
+                </span>
+
+                <span class="min-temp">
+                    {{ day.minTemp }}
+                </span>
+
+            </div>
+
+            <div class="forecast-condition">
+
+                {{ day.condition }}
+
+            </div>
+
+            <div class="rain-chance">
+
+                🌧 {{ day.rainChance }}
+
+            </div>
+
+        </div>
+        }
+
+    </div>
+
+</div>

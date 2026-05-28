@@ -1,9 +1,44 @@
-<div class="dashboard-background">
+<div class="weather-atmosphere" [ngClass]="backgroundClass()">
 
-    <div class="glow glow-1"></div>
+    <div class="floating-glow glow-1"></div>
+    <div class="floating-glow glow-2"></div>
 
-    <div class="glow glow-2"></div>
+    <div class="weather-particles"></div>
+
+    @if (backgroundClass() === 'rainy') {
+
+    <div class="rain-layer"></div>
+
+    }
+    @if (backgroundClass() === 'storm') {
+
+    <div class="lightning-flash"></div>
+
+    }
+
+    @if (
+    backgroundClass() === 'cloudy' ||
+    backgroundClass() === 'rainy' ||
+    backgroundClass() === 'storm'
+    ) {
+
+    <div class="cloud-layer layer-1"></div>
+
+    <div class="cloud-layer layer-2"></div>
+
+    }
+
+    @if (backgroundClass() === 'sunny') {
+
+    <div class="sun-rays"></div>
+
+    <div class="sun-particles"></div>
+
+    }
+
 </div>
+
+<div class="cursor-glow"></div>
 
 <div class="weather-dashboard" [class.loading-transition]="isLoading()" [class.sunny-atmosphere]="
         backgroundClass() === 'sunny'
@@ -35,6 +70,7 @@
         <app-forecast-timeline [forecast]="forecast()" />
 
     </div>
+    <app-daily-forecast [forecast]="dailyForecast()" />
     <app-temperature-chart [forecast]="forecast()" />
     <app-weather-map [city]="city()" [latitude]="latitude()" [longitude]="longitude()" />
     <app-weather-insight [insight]="streamedInsight()" [isLoading]="isInsightLoading()" />

@@ -1,4 +1,10 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import {
+  Component,
+  signal,
+  computed,
+  inject,
+  HostListener,
+} from '@angular/core';
 
 import { WeatherHeroComponent } from '../../widgets/weather-hero/weather-hero.component';
 import { StatCardComponent } from '../../widgets/stat-card/stat-card.component';
@@ -12,6 +18,9 @@ import { WeatherInsightComponent } from '../../widgets/weather-insight/weather-i
 import { WeatherAiService } from '../../../../core/services/weather-ai.service';
 import { TemperatureChartComponent } from '../../widgets/temperature-chart/temperature-chart.component';
 import { WeatherMapComponent } from '../../widgets/weather-map/weather-map.component';
+import { NgClass } from '@angular/common';
+import { DailyForecast } from '../../models/daily-forecast.model';
+import { DailyForecastComponent } from '../../widgets/daily-forecast/daily-forecast.component';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -24,6 +33,8 @@ import { WeatherMapComponent } from '../../widgets/weather-map/weather-map.compo
     WeatherInsightComponent,
     TemperatureChartComponent,
     WeatherMapComponent,
+    NgClass,
+    DailyForecastComponent,
   ],
   templateUrl: './weather-dashboard.component.html',
   styleUrl: './weather-dashboard.component.scss',
@@ -57,6 +68,25 @@ export class WeatherDashboardComponent {
   readonly isInsightLoading = signal(false);
   private readonly weatherAiService = inject(WeatherAiService);
 
+  readonly dailyForecast = signal<DailyForecast[]>([]);
+
+  cursorX = signal(0);
+
+  cursorY = signal(0);
+
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent): void {
+    const glow = document.querySelector('.cursor-glow') as HTMLElement;
+
+    if (!glow) {
+      return;
+    }
+
+    glow.style.left = `${event.clientX}px`;
+
+    glow.style.top = `${event.clientY}px`;
+  }
+
   readonly stats = signal([
     {
       label: 'Humidity',
@@ -79,10 +109,14 @@ export class WeatherDashboardComponent {
   readonly backgroundClass = computed(() => {
     const condition = this.condition().toLowerCase();
 
+    if (condition.includes('thunder') || condition.includes('storm')) {
+      return 'storm';
+    }
+
     if (
       condition.includes('rain') ||
-      condition.includes('drizzle') ||
-      condition.includes('thunder')
+      condition.includes('drizzle')
+      // ||condition.includes('thunder')
     ) {
       return 'rainy';
     }
@@ -129,6 +163,8 @@ export class WeatherDashboardComponent {
     this.forecast.set(weatherData.forecast);
 
     const insightResponse = this.streamedInsight.set('');
+
+    this.dailyForecast.set(weatherData.dailyForecast);
 
     try {
       this.streamedInsight.set('');

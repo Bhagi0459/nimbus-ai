@@ -1,0 +1,193 @@
+.daily-forecast-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 1.2rem;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(135deg,
+            rgba(20, 28, 48, 0.92),
+            rgba(17, 24, 39, 0.88));
+
+    border:
+        1px solid rgba(255, 255, 255, 0.05);
+
+    backdrop-filter:
+        blur(24px);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+.daily-forecast-card::before {
+
+    content: '';
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+
+        radial-gradient(circle at top left,
+            rgba(14, 165, 233, 0.08),
+            transparent 45%),
+
+        radial-gradient(circle at bottom right,
+            rgba(139, 92, 246, 0.08),
+            transparent 40%);
+
+    pointer-events: none;
+}
+
+.forecast-header {
+
+    margin-bottom: 1rem;
+}
+
+.forecast-header h3 {
+
+    margin: 0;
+
+    font-size: 1.2rem;
+
+    color: #f8fafc;
+}
+
+.forecast-header p {
+
+    margin-top: 0.25rem;
+
+    font-size: 0.88rem;
+
+    color:
+        rgba(148, 163, 184, 0.78);
+}
+
+.forecast-scroll {
+
+    display: flex;
+
+    gap: 1rem;
+
+    overflow-x: auto;
+
+    padding-bottom: 0.3rem;
+
+    scrollbar-width: none;
+}
+
+.forecast-scroll::-webkit-scrollbar {
+
+    display: none;
+}
+
+.forecast-day {
+
+    min-width: 150px;
+
+    padding: 1rem;
+
+    border-radius: 22px;
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.05);
+
+    transition:
+        transform 0.35s ease,
+        background 0.35s ease,
+        border-color 0.35s ease;
+
+    backdrop-filter:
+        blur(12px);
+}
+
+.forecast-day:hover {
+
+    transform:
+        translateY(-5px);
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    border-color:
+        rgba(56, 189, 248, 0.2);
+}
+
+.forecast-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 0.8rem;
+}
+
+.forecast-top img {
+
+    width: 42px;
+
+    height: 42px;
+}
+
+.day-name {
+
+    font-weight: 700;
+
+    color: #f8fafc;
+}
+
+.forecast-temp {
+
+    display: flex;
+
+    gap: 0.5rem;
+
+    align-items: baseline;
+
+    margin-bottom: 0.5rem;
+}
+
+.max-temp {
+
+    font-size: 1.35rem;
+
+    font-weight: 700;
+
+    color: #f8fafc;
+}
+
+.min-temp {
+
+    font-size: 0.95rem;
+
+    color:
+        rgba(148, 163, 184, 0.82);
+}
+
+.forecast-condition {
+
+    font-size: 0.88rem;
+
+    color:
+        rgba(226, 232, 240, 0.9);
+
+    margin-bottom: 0.7rem;
+}
+
+.rain-chance {
+
+    font-size: 0.82rem;
+
+    color:
+        #7dd3fc;
+}

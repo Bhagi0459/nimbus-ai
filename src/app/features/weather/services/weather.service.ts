@@ -19,6 +19,7 @@ export class WeatherService {
           key: environment.weatherApiKey,
 
           q: city,
+          days: 7,
         },
       }),
     );
@@ -78,6 +79,22 @@ export class WeatherService {
           value: `${response.current.feelslike_c}°C`,
         },
       ],
+
+      dailyForecast: response.forecast.forecastday.map((day: any) => ({
+        day: new Date(day.date).toLocaleString('en-US', {
+          weekday: 'short',
+        }),
+
+        condition: day.day.condition.text,
+
+        icon: `https:${day.day.condition.icon}`,
+
+        maxTemp: `${day.day.maxtemp_c}°C`,
+
+        minTemp: `${day.day.mintemp_c}°C`,
+
+        rainChance: `${day.day.daily_chance_of_rain}%`,
+      })),
     };
   }
 
