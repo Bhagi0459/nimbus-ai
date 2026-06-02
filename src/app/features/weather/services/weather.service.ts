@@ -27,11 +27,13 @@ export class WeatherService {
           key: environment.weatherApiKey,
 
           q: city,
-
           days: 7,
+          aqi: 'yes',
         },
       }),
     );
+
+    const coordinates = await this.getCoordinates(city);
 
     return {
       city: response.location.name,
@@ -46,15 +48,37 @@ export class WeatherService {
 
       localTime: response.location.localtime,
 
-      latitude: response.location.lat,
+      latitude: coordinates?.latitude ?? response.location.lat,
 
-      longitude: response.location.lon,
+      longitude: coordinates?.longitude ?? response.location.lon,
 
       forecast: this.mapHourlyForecast(response),
 
       dailyForecast: this.mapDailyForecast(response),
 
       stats: this.mapStats(response),
+
+      maxTemp: `${response.forecast.forecastday[0].day.maxtemp_c}°C`,
+
+      minTemp: `${response.forecast.forecastday[0].day.mintemp_c}°C`,
+
+      sunrise: response.forecast.forecastday[0].astro.sunrise,
+
+      sunset: response.forecast.forecastday[0].astro.sunset,
+
+      windSpeed: response.current.wind_kph,
+
+      windDegree: response.current.wind_degree,
+
+      windDirection: response.current.wind_dir,
+
+      airQuality: {
+        epaIndex: response.current.air_quality['us-epa-index'],
+
+        pm25: response.current.air_quality.pm2_5,
+
+        pm10: response.current.air_quality.pm10,
+      },
     };
   }
 
@@ -138,28 +162,73 @@ export class WeatherService {
   private mapStats(response: any) {
     return [
       {
+        icon: 'droplet',
         label: 'Humidity',
-
         value: `${response.current.humidity}%`,
       },
-
       {
+        icon: 'wind',
         label: 'Wind',
-
         value: `${response.current.wind_kph} km/h`,
       },
-
       {
+        icon: 'gauge',
+        label: 'Pressure',
+        value: `${response.current.pressure_mb} mb`,
+      },
+      {
+        icon: 'eye',
+        label: 'Visibility',
+        value: `${response.current.vis_km} km`,
+      },
+      {
+        icon: 'sun',
         label: 'UV Index',
-
         value: `${response.current.uv}`,
       },
-
       {
-        label: 'Feels Like',
-
-        value: `${response.current.feelslike_c}°C`,
+        icon: 'zap',
+        label: 'Wind Gust',
+        value: `${response.current.gust_kph} km/h`,
+      },
+      {
+        icon: 'cloud',
+        label: 'Cloud Cover',
+        value: `${response.current.cloud}%`,
+      },
+      {
+        icon: 'thermometer',
+        label: 'Dew Point',
+        value: `${response.current.dewpoint_c}°C`,
       },
     ];
+  }
+
+  private async getCoordinates(city: string): Promise<{
+    latitude: number;
+    longitude: number;
+  } | null> {
+    try {
+      const response = await firstValueFrom(
+        this.http.get<any[]>('https://nominatim.openstreetmap.org/search', {
+          params: {
+            q: city,
+            format: 'json',
+            limit: 1,
+          },
+        }),
+      );
+
+      if (!response.length) {
+        return null;
+      }
+
+      return {
+        latitude: Number(response[0].lat),
+        longitude: Number(response[0].lon),
+      };
+    } catch {
+      return null;
+    }
   }
 }

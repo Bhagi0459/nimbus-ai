@@ -10,4 +10,5 @@ import { ForecastHour } from '../../models/forecast-hour.model';
 })
 export class ForecastTimelineComponent {
   readonly forecast = input<ForecastHour[]>([]);
+  readonly isLoading = input(false);
 }

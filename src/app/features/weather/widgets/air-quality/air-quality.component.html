@@ -1,0 +1,34 @@
+<div class="air-quality-card">
+    <div class="card-header">
+        <h3> Air Quality </h3>
+        <span class="aqi-badge"> EPA </span>
+    </div>
+    @if (isLoading()) {
+    <div class="aqi-skeleton">
+        <div class="skeleton skeleton-ring"></div>
+        <div class="skeleton-column">
+            <div class="skeleton skeleton-pollutant"></div>
+            <div class="skeleton skeleton-pollutant"></div>
+        </div>
+    </div>
+    } @else {
+    <div class="air-quality-content">
+        <div class="aqi-ring" [class]="airQualityClass()">
+            <div class="aqi-center">
+                <span class="aqi-number"> {{ epaIndex() }} </span>
+                <span class="aqi-status"> {{ airQualityLabel() }} </span>
+            </div>
+        </div>
+        <div class="pollutants">
+            <div class="pollutant">
+                <span> PM2.5 </span>
+                <strong> {{ pm25() }} </strong>
+            </div>
+            <div class="pollutant">
+                <span> PM10 </span>
+                <strong> {{ pm10() }} </strong>
+            </div>
+        </div>
+    </div>
+    }
+</div>

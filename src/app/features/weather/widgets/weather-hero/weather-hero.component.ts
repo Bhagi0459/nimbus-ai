@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+
 @Component({
   selector: 'app-weather-hero',
   standalone: true,
@@ -15,4 +16,8 @@ export class WeatherHeroComponent {
   readonly conditionIcon = input('');
   readonly localTime = input('');
   readonly greeting = input('');
+  readonly maxTemp = input('');
+  readonly minTemp = input('');
+  readonly sunrise = input('');
+  readonly sunset = input('');
 }

@@ -5,10 +5,10 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import {
   ApexAxisChartSeries,
   ApexChart,
+  ApexDataLabels,
   ApexFill,
   ApexGrid,
   ApexMarkers,
-  ApexStates,
   ApexStroke,
   ApexTooltip,
   ApexXAxis,
@@ -19,133 +19,130 @@ import { ForecastHour } from '../../models/forecast-hour.model';
 
 @Component({
   selector: 'app-temperature-chart',
-
   standalone: true,
-
   imports: [NgApexchartsModule],
-
   templateUrl: './temperature-chart.component.html',
-
   styleUrl: './temperature-chart.component.scss',
 })
 export class TemperatureChartComponent {
   readonly forecast = input<ForecastHour[]>([]);
+  readonly isLoading = input(false);
 
   readonly temperatures = computed(() =>
-    this.forecast().map((item) => Number.parseFloat(item.temperature)),
+    this.forecast().map((item) =>
+      Number.parseFloat(item.temperature.replace('°C', '')),
+    ),
   );
 
   readonly chartSeries = computed<ApexAxisChartSeries>(() => [
     {
       name: 'Temperature',
-
       data: this.temperatures(),
     },
   ]);
 
   readonly xaxis = computed<ApexXAxis>(() => ({
     categories: this.forecast().map((item) => item.time),
-
     axisBorder: {
       show: false,
     },
-
     axisTicks: {
       show: false,
     },
-
     labels: {
+      hideOverlappingLabels: false,
       style: {
         colors: '#94a3b8',
-
         fontSize: '12px',
-
         fontWeight: 500,
       },
     },
   }));
 
-  readonly chart = {
-    type: 'line',
-
-    height: 240,
-
-    parentHeightOffset: 0,
-
+  readonly chart: ApexChart = {
+    type: 'area',
+    height: 310,
     toolbar: {
       show: false,
     },
-
     zoom: {
       enabled: false,
     },
-
+    parentHeightOffset: 0,
     animations: {
       enabled: true,
-
-      easing: 'easeinout',
-
-      speed: 900,
-    },
-
-    foreColor: '#ffffff',
-  } as ApexChart;
-
-  readonly stroke = {
-    curve: 'smooth' as const,
-
-    width: 3.8,
-
-    lineCap: 'round',
-  } as ApexStroke;
-
-  readonly tooltip = {
-    theme: 'dark',
-
-    style: {
-      fontSize: '14px',
-    },
-
-    marker: {
-      show: false,
-    },
-  } as ApexTooltip;
-
-  readonly yaxis = {
-    show: false,
-  } as ApexYAxis;
-
-  readonly grid = {
-    borderColor: 'rgba(255,255,255,0.018)',
-
-    strokeDashArray: 5,
-
-    padding: {
-      left: 8,
-
-      right: 8,
-    },
-  } as ApexGrid;
-
-  readonly fill = {
-    opacity: 0,
-  } as ApexFill;
-
-  readonly markers = {
-    size: 0,
-
-    hover: {
-      size: 6,
-    },
-  } as ApexMarkers;
-
-  readonly states = {
-    hover: {
-      filter: {
-        type: 'lighten',
+      speed: 800,
+      animateGradually: {
+        enabled: true,
+        delay: 150,
+      },
+      dynamicAnimation: {
+        enabled: true,
+        speed: 350,
       },
     },
-  } as ApexStates;
+    foreColor: '#ffffff',
+  };
+
+  readonly dataLabels: ApexDataLabels = {
+    enabled: false,
+  };
+
+  readonly stroke: ApexStroke = {
+    curve: 'smooth',
+    width: 4,
+  };
+
+  readonly fill: ApexFill = {
+    type: 'gradient',
+    gradient: {
+      shadeIntensity: 1,
+      opacityFrom: 0.18,
+      opacityTo: 0.01,
+      stops: [0, 100],
+    },
+  };
+
+  readonly tooltip: ApexTooltip = {
+    theme: 'dark',
+  };
+
+  readonly markers: ApexMarkers = {
+    size: 3,
+    hover: {
+      size: 7,
+    },
+  };
+
+  readonly yaxis = computed<ApexYAxis>(() => {
+    const temps = this.temperatures();
+
+    if (!temps.length) {
+      return {
+        show: false,
+      };
+    }
+
+    const min = Math.min(...temps);
+    const max = Math.max(...temps);
+
+    return {
+      show: false,
+      min: Math.floor(min - 2),
+      max: Math.ceil(max + 2),
+    };
+  });
+
+  readonly grid: ApexGrid = {
+    borderColor: 'rgba(255,255,255,0.03)',
+    strokeDashArray: 4,
+    padding: {
+      left: 18,
+      right: 8,
+      top: 10,
+      bottom: 0,
+    },
+  };
 
   readonly colors = ['#7dd3fc'];
 }

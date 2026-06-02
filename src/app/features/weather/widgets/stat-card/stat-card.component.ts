@@ -11,4 +11,5 @@ export class StatCardComponent {
   readonly label = input<string>();
   readonly value = input<string>();
   readonly isLoading = input(false);
+  readonly icon = input<string>();
 }

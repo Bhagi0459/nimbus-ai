@@ -1,20 +1,24 @@
 <div class="chart-card">
-
     <div class="chart-header">
-
-        <h3>
-            Temperature Trend
-        </h3>
-
-        <p>
-            Hourly temperature flow
-        </p>
-
+        <h3> Temperature Trend</h3>
+        <p> Hourly temperature flow</p>
     </div>
 
-    <apx-chart [series]="chartSeries()" [chart]="chart" [stroke]="stroke" [tooltip]="tooltip" [xaxis]="xaxis()"
-        [yaxis]="yaxis" [grid]="grid" [fill]="fill" [markers]="markers" [states]="states" [colors]="colors">
+    @if (isLoading()) {
 
+    <div class="chart-skeleton">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line medium"></div>
+    </div>
+
+    } @else {
+
+    <apx-chart [series]="chartSeries()" [chart]="chart" [stroke]="stroke" [fill]="fill" [tooltip]="tooltip"
+        [xaxis]="xaxis()" [yaxis]="yaxis()" [grid]="grid" [markers]="markers" [dataLabels]="dataLabels"
+        [colors]="colors">
     </apx-chart>
 
+    }
 </div>

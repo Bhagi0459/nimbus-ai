@@ -1,0 +1,49 @@
+<div class="wind-card">
+    <div class="card-header">
+        <h3>Wind</h3>
+    </div>
+    @if (isLoading()) {
+
+    <div class="wind-skeleton">
+        <div class="skeleton skeleton-compass"></div>
+        <div class="skeleton skeleton-speed"></div>
+    </div>
+
+    } @else {
+
+    <div class="wind-content">
+        <div class="compass-container">
+            <div class="compass">
+                <span class="north">N</span>
+                <span class="east">E</span>
+                <span class="south">S</span>
+                <span class="west">W</span>
+                <span class="nw">NW</span>
+                <span class="ne">NE</span>
+                <span class="sw">SW</span>
+                <span class="se">SE</span>
+                <div class="tick top"></div>
+                <div class="tick right"></div>
+                <div class="tick bottom"></div>
+                <div class="tick left"></div>
+                <div class="compass-arrow" [style.transform]="'translate(-50%, -100%) rotate(' + windDegree() + 'deg)'">
+                </div>
+                <div class="compass-center"></div>
+            </div>
+        </div>
+
+        <div class="wind-details">
+            <div class="wind-speed">
+                {{ windSpeed() }}
+                <span>
+                    km/h
+                </span>
+            </div>
+            <div class="wind-meta">
+                {{ fullDirection() }} • {{ windDegree() }}°
+            </div>
+        </div>
+    </div>
+
+    }
+</div>

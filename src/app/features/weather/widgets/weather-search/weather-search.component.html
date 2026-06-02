@@ -1,70 +1,37 @@
 <div class="search-shell">
-
     <div class="search-container">
-
         <div class="search-input-wrapper">
-
             <span class="search-icon">
-
                 ⌕
-
             </span>
-
             <input type="text" placeholder="Search city..." [value]="cityName()" (input)="updateCity($event)"
                 (keyup.enter)="searchCity()" [disabled]="isLoading()" />
-
         </div>
-
         <button (click)="searchCity()" [disabled]="isLoading()">
-
             @if (isLoading()) {
-
             Loading...
-
             } @else {
-
             Search
-
             }
-
         </button>
-
     </div>
 
     @if (suggestions().length > 0) {
-
     <div class="suggestions-dropdown">
-
         @for (
         suggestion of suggestions();
         track suggestion.id
         ) {
-
-        <div class="suggestion-item" (click)="
-                searchCityFromSuggestion(
-                    suggestion.name
-                )
-            ">
-
+        <div class="suggestion-item" (click)="searchCityFromSuggestion(suggestion.name)">
             <div class="suggestion-main">
-
                 {{ suggestion.name }}
-
             </div>
-
             <div class="suggestion-meta">
-
                 {{ suggestion.region }},
                 {{ suggestion.country }}
-
             </div>
-
         </div>
-
         }
-
     </div>
-
     }
-
 </div>

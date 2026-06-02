@@ -10,31 +10,35 @@
 
 <div class="hero-layout">
     <div class="hero-content">
-        <p class="hero-greeting">
-            {{ greeting() }}
-        </p>
-        <h1 class="hero-temp">
-            {{ temperature() }}
-        </h1>
-        <div class="hero-city-row">
-            <h2 class="hero-city">
-                {{ city() }}
-            </h2>
-            <div class="hero-condition-pill">
-                {{ condition() }}
-            </div>
+        <!-- Greeting -->
+        <div class="hero-top-row">
+            <p class="hero-greeting">{{ greeting() }}</p>
+            <p class="hero-time"> 🕒 {{ localTime() }} IST</p>
         </div>
-        <p class="hero-feels-like">
-            Feels like {{ feelsLike() }}
-        </p>
-        <p class="hero-time">
-            {{ localTime() }}
-        </p>
-    </div>
-    <div class="hero-visual">
-        <div class="weather-orb"></div>
-        <img [src]="conditionIcon()" [alt]="condition()" />
+
+        <!-- Temperature + Icon -->
+        <div class="hero-temp-row">
+            <h1 class="hero-temp"> {{ temperature() }} </h1>
+            <img class="hero-main-icon" [src]="conditionIcon()" [alt]="condition()" />
+        </div>
+
+        <!-- City -->
+        <h2 class="hero-city"> {{ city() }}</h2>
+
+        <!-- Condition -->
+        <div class="hero-condition-pill"> {{condition()}} </div>
+
+        <!-- Details -->
+        <div class="hero-high-low">
+            <span> ↑ {{ maxTemp() }} </span>
+            <span> ↓ {{ minTemp() }} </span>
+        </div>
+
+        <!-- Sunrise Sunset -->
+        <div class="hero-sun-times">
+            <span> 🌅 {{ sunrise() }} </span>
+            <span> 🌇 {{ sunset() }} </span>
+        </div>
     </div>
 </div>
-
 }

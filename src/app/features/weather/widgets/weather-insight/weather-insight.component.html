@@ -1,65 +1,28 @@
 <div class="insight-card">
-
     <div class="insight-top">
-
         <div class="insight-badge">
-
-            <span class="badge-dot"></span>
-
-            Nimbus AI Insight
-
+            <span class="badge-dot"></span> Nimbus AI Insight
         </div>
-
         <div class="insight-status">
-
             Live Analysis
-
         </div>
-
     </div>
 
     @if (isLoading()) {
-
     <div class="thinking-state">
-
         <div class="thinking-orb"></div>
-
         <div class="thinking-content">
-
-            <h4>
-                Processing Atmospheric Data
-            </h4>
-
-            <p>
-                Nimbus AI is analyzing live weather patterns...
-            </p>
-
+            <h4> Processing Atmospheric Data</h4>
+            <p> Nimbus AI is analyzing live weather patterns... </p>
         </div>
-
     </div>
 
     } @else {
 
     @if (insight()) {
-
     <div class="insight-content">
-
-        <div class="quote-mark">
-
-            “
-
-        </div>
-
-        <p class="insight-text">
-
-            {{ insight() }}
-
-        </p>
-
+        <p class="insight-text"> {{ insight() }} </p>
     </div>
-
     }
-
     }
-
 </div>

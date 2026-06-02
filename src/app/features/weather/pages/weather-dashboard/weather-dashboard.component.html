@@ -48,40 +48,48 @@
     <div class="dashboard-search">
 
         <app-weather-search [isLoading]="isLoading()" [suggestions]="suggestions()" (search)="searchCity($event)"
-            (searchInputChange)="searchSuggestions($event)" />
+            (searchInputChange)="searchSuggestions($event)">
+        </app-weather-search>
 
     </div>
 
+    <!-- ===================================================== -->
     <!-- TOP GRID -->
+    <!-- ===================================================== -->
 
-    <div class="top-grid">
+    <div class="main-grid">
 
-        <!-- LEFT -->
+        <!-- LEFT COLUMN -->
 
-        <div class="hero-section">
+        <div class="left-column">
 
-            <div class="hero-stats-layout">
+            <div class="hero-card">
 
-                <!-- HERO -->
+                <app-weather-hero [temperature]="temperature()" [feelsLike]="feelsLike()"
+                    [conditionIcon]="conditionIcon()" [city]="city()" [condition]="condition()"
+                    [localTime]="formattedLocalTime()" [greeting]="greeting()" [isLoading]="isLoading()"
+                    [maxTemp]="maxTemp()" [minTemp]="minTemp()" [sunrise]="sunrise()" [sunset]="sunset()">
+                </app-weather-hero>
 
-                <div class="hero-panel">
+                <div class="hero-stats-grid">
 
-                    <app-weather-hero [temperature]="temperature()" [feelsLike]="feelsLike()"
-                        [conditionIcon]="conditionIcon()" [city]="city()" [condition]="condition()"
-                        [localTime]="formattedLocalTime()" [greeting]="greeting()" [isLoading]="isLoading()" />
+                    @if (isLoading()) {
 
-                </div>
+                    @for (item of [1,2,3,4,5,6,7,8]; track item) {
 
-                <!-- STATS -->
+                    <app-stat-card [isLoading]="true">
+                    </app-stat-card>
 
-                <div class="stats-grid">
+                    }
 
-                    @for (
-                    stat of stats();
-                    track stat.label
-                    ) {
+                    } @else {
 
-                    <app-stat-card [label]="stat.label" [value]="stat.value" [isLoading]="isLoading()" />
+                    @for (stat of stats(); track stat.label) {
+
+                    <app-stat-card [label]="stat.label" [value]="stat.value" [icon]="stat.icon" [isLoading]="false">
+                    </app-stat-card>
+
+                    }
 
                     }
 
@@ -91,47 +99,81 @@
 
         </div>
 
-        <!-- RIGHT -->
+        <!-- CENTER COLUMN -->
 
-        <div class="forecast-section">
+        <div class="center-column">
 
-            <app-daily-forecast [forecast]="dailyForecast()" />
+            <div class="visuals-grid">
+
+                <div class="chart-card-wrapper">
+
+                    <app-temperature-chart [forecast]="forecast()" [isLoading]="isLoading()">
+                    </app-temperature-chart>
+
+                </div>
+
+                <div class="map-card-wrapper">
+
+                    <app-weather-map [city]="city()" [latitude]="latitude()" [longitude]="longitude()"
+                        [isLoading]="isLoading()">
+                    </app-weather-map>
+
+                </div>
+
+            </div>
+
+            <div class="hourly-card-wrapper">
+
+                <app-forecast-timeline [forecast]="forecast()" [isLoading]="isLoading()">
+                </app-forecast-timeline>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+
+        <div class="forecast-column">
+
+            <app-daily-forecast [forecast]="dailyForecast()" [isLoading]="isLoading()">
+            </app-daily-forecast>
 
         </div>
 
     </div>
 
-    <!-- MIDDLE -->
+    <!-- ===================================================== -->
+    <!-- BOTTOM ROW -->
+    <!-- ===================================================== -->
 
-    <div class="middle-grid">
+    <div class="dashboard-bottom-row">
 
-        <div class="hourly-section">
+        <!-- AI INSIGHT -->
 
-            <app-forecast-timeline [forecast]="forecast()" />
+        <div class="bottom-insight">
 
-        </div>
-
-        <div class="insight-section">
-
-            <app-weather-insight [insight]="streamedInsight()" [isLoading]="isInsightLoading()" />
-
-        </div>
-
-    </div>
-
-    <!-- BOTTOM -->
-
-    <div class="bottom-grid">
-
-        <div class="chart-section">
-
-            <app-temperature-chart [forecast]="forecast()" />
+            <app-weather-insight [insight]="streamedInsight()" [isLoading]="isInsightLoading()">
+            </app-weather-insight>
 
         </div>
 
-        <div class="map-section">
+        <!-- AIR QUALITY -->
 
-            <app-weather-map [city]="city()" [latitude]="latitude()" [longitude]="longitude()" />
+        <div class="bottom-air-quality">
+
+            <app-air-quality [epaIndex]="airQuality().epaIndex" [pm25]="airQuality().pm25" [pm10]="airQuality().pm10"
+                [isLoading]="isInsightLoading()">
+            </app-air-quality>
+
+        </div>
+
+        <!-- WIND COMPASS -->
+
+        <div class="bottom-wind">
+
+            <app-wind-compass [windSpeed]="windSpeed()" [windDegree]="windDegree()" [windDirection]="windDirection()"
+                [isLoading]="isInsightLoading()">
+            </app-wind-compass>
 
         </div>
 

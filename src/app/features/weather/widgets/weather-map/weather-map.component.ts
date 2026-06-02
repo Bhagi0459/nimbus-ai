@@ -11,26 +11,19 @@ import * as L from 'leaflet';
 
 @Component({
   selector: 'app-weather-map',
-
   standalone: true,
-
   imports: [],
-
   templateUrl: './weather-map.component.html',
-
   styleUrl: './weather-map.component.scss',
 })
 export class WeatherMapComponent
   implements AfterViewInit, OnDestroy, OnChanges
 {
   readonly city = input('Hyderabad');
-
   readonly latitude = input(17.385);
-
   readonly longitude = input(78.4867);
-
+  readonly isLoading = input(false);
   private map?: L.Map;
-
   private marker?: L.Marker;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -39,13 +32,10 @@ export class WeatherMapComponent
         number,
         number,
       ];
-
-      this.map.setView(coordinates, 10, {
+      this.map.setView(coordinates, 14, {
         animate: true,
       });
-
       this.marker?.setLatLng(coordinates);
-
       this.marker?.bindPopup(
         `
           <div class="map-popup">
@@ -55,7 +45,6 @@ export class WeatherMapComponent
           </div>
         `,
       );
-
       setTimeout(() => {
         this.map?.invalidateSize();
       }, 250);
@@ -66,7 +55,6 @@ export class WeatherMapComponent
     requestAnimationFrame(() => {
       setTimeout(() => {
         this.initializeMap();
-
         this.map?.invalidateSize(true);
       }, 250);
     });
@@ -78,10 +66,9 @@ export class WeatherMapComponent
 
   private initializeMap(): void {
     const coordinates = [this.latitude(), this.longitude()] as [number, number];
-
     this.map = L.map('weather-map', {
       zoomControl: false,
-    }).setView(coordinates, 10);
+    }).setView(coordinates, 14);
 
     L.tileLayer(
       'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
@@ -90,16 +77,29 @@ export class WeatherMapComponent
       },
     ).addTo(this.map);
 
+    // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+    // L.tileLayer(
+    //   'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    //   {
+    //     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    //   },
+    // ).addTo(this.map);
+
+    //     L.tileLayer(
+    //   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    //   {
+    //     attribution: '&copy; OpenStreetMap contributors',
+    //   }
+    // ).addTo(this.map);
+
     const weatherIcon = L.divIcon({
       className: 'weather-marker',
-
       html: `
           <div class="marker-glow"></div>
           <div class="marker-core"></div>
         `,
-
       iconSize: [30, 30],
-
       iconAnchor: [15, 15],
     });
 

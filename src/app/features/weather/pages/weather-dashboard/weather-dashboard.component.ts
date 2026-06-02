@@ -4,6 +4,7 @@ import {
   computed,
   inject,
   HostListener,
+  OnInit,
 } from '@angular/core';
 
 import { NgClass } from '@angular/common';
@@ -18,12 +19,14 @@ import { WeatherMapComponent } from '../../widgets/weather-map/weather-map.compo
 import { DailyForecastComponent } from '../../widgets/daily-forecast/daily-forecast.component';
 
 import { WeatherService } from '../../services/weather.service';
-
 import { WeatherAiService } from '../../../../core/services/weather-ai.service';
 
 import { CitySuggestion } from '../../models/city-suggestion.model';
 import { ForecastHour } from '../../models/forecast-hour.model';
 import { DailyForecast } from '../../models/daily-forecast.model';
+import { AirQuality } from '../../models/air-quality.model';
+import { AirQualityComponent } from '../../widgets/air-quality/air-quality.component';
+import { WindCompassComponent } from '../../widgets/wind-compass/wind-compass.component';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -40,22 +43,24 @@ import { DailyForecast } from '../../models/daily-forecast.model';
     WeatherMapComponent,
     DailyForecastComponent,
     NgClass,
+    AirQualityComponent,
+    WindCompassComponent,
   ],
 
   templateUrl: './weather-dashboard.component.html',
 
   styleUrl: './weather-dashboard.component.scss',
 })
-export class WeatherDashboardComponent {
+export class WeatherDashboardComponent implements OnInit {
   private readonly weatherService = inject(WeatherService);
 
   private readonly weatherAiService = inject(WeatherAiService);
 
-  readonly city = signal('Hyderabad');
+  readonly city = signal('');
 
-  readonly temperature = signal('28°C');
+  readonly temperature = signal('');
 
-  readonly condition = signal('sunny');
+  readonly condition = signal('');
 
   readonly feelsLike = signal('');
 
@@ -63,9 +68,9 @@ export class WeatherDashboardComponent {
 
   readonly localTime = signal('');
 
-  readonly latitude = signal(17.385);
+  readonly latitude = signal(16.24);
 
-  readonly longitude = signal(78.4867);
+  readonly longitude = signal(80.64);
 
   readonly isLoading = signal(false);
 
@@ -79,33 +84,37 @@ export class WeatherDashboardComponent {
 
   readonly dailyForecast = signal<DailyForecast[]>([]);
 
-  readonly stats = signal([
-    {
-      label: 'Humidity',
-      value: '72%',
-    },
+  readonly maxTemp = signal('');
 
-    {
-      label: 'Wind',
-      value: '12 km/h',
-    },
+  readonly minTemp = signal('');
 
-    {
-      label: 'UV Index',
-      value: '4',
-    },
+  readonly sunrise = signal('');
 
+  readonly sunset = signal('');
+
+  readonly stats = signal<
     {
-      label: 'Feels Like',
-      value: '31°C',
-    },
-  ]);
+      icon: string;
+      label: string;
+      value: string;
+    }[]
+  >([]);
 
   private searchDebounceTimer?: ReturnType<typeof setTimeout>;
 
-  cursorX = signal(0);
+  readonly cursorX = signal(0);
 
-  cursorY = signal(0);
+  readonly cursorY = signal(0);
+
+  readonly windSpeed = signal(0);
+
+  readonly windDegree = signal(0);
+
+  readonly windDirection = signal('');
+
+  ngOnInit(): void {
+    this.searchCity('Tenali');
+  }
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
@@ -175,11 +184,8 @@ export class WeatherDashboardComponent {
 
     return date.toLocaleString('en-US', {
       weekday: 'long',
-
       hour: 'numeric',
-
       minute: '2-digit',
-
       hour12: true,
     });
   });
@@ -189,6 +195,18 @@ export class WeatherDashboardComponent {
       this.isLoading.set(true);
 
       this.isInsightLoading.set(true);
+
+      /* CLEAR OLD DATA */
+
+      this.forecast.set([]);
+
+      this.dailyForecast.set([]);
+
+      this.stats.set([]);
+
+      this.suggestions.set([]);
+
+      this.streamedInsight.set('');
 
       const weatherData = await this.weatherService.getWeatherByCity(city);
 
@@ -216,33 +234,50 @@ export class WeatherDashboardComponent {
 
       this.stats.set(weatherData.stats);
 
+      console.log('stats', weatherData.stats);
+
       this.forecast.set(weatherData.forecast);
 
       this.dailyForecast.set(weatherData.dailyForecast);
+      this.airQuality.set(weatherData.airQuality);
 
-      /* SEARCH */
+      this.maxTemp.set(weatherData.maxTemp);
 
-      this.suggestions.set([]);
+      this.minTemp.set(weatherData.minTemp);
+      this.sunrise.set(weatherData.sunrise);
+
+      this.sunset.set(weatherData.sunset);
+
+      this.windSpeed.set(weatherData.windSpeed);
+
+      this.windDegree.set(weatherData.windDegree);
+
+      this.windDirection.set(weatherData.windDirection);
 
       /* AI */
 
-      this.streamedInsight.set('');
-
-      await this.weatherAiService.generateInsight(
-        weatherData,
-
-        (chunk) => {
+      this.weatherAiService
+        .generateInsight(weatherData, (chunk) => {
           this.streamedInsight.update((current) => current + chunk);
-        },
-      );
+        })
+        .then(() => {
+          this.isInsightLoading.set(false);
+        })
+        .catch(() => {
+          this.streamedInsight.set(
+            'Unable to fetch weather insight right now.',
+          );
+
+          this.isInsightLoading.set(false);
+        });
     } catch (error) {
       console.error('Weather Search Error:', error);
 
       this.streamedInsight.set('Unable to fetch weather insight right now.');
-    } finally {
-      this.isLoading.set(false);
 
       this.isInsightLoading.set(false);
+    } finally {
+      this.isLoading.set(false);
     }
   }
 
@@ -256,9 +291,23 @@ export class WeatherDashboardComponent {
     }
 
     this.searchDebounceTimer = setTimeout(async () => {
-      const suggestions = await this.weatherService.searchCities(query);
+      try {
+        const suggestions = await this.weatherService.searchCities(query);
 
-      this.suggestions.set(suggestions);
+        this.suggestions.set(suggestions);
+      } catch (error) {
+        console.error('City Search Error:', error);
+
+        this.suggestions.set([]);
+      }
     }, 400);
   }
+
+  readonly airQuality = signal<AirQuality>({
+    epaIndex: 0,
+
+    pm25: 0,
+
+    pm10: 0,
+  });
 }

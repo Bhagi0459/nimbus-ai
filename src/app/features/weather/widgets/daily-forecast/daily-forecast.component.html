@@ -1,103 +1,53 @@
 <div class="daily-forecast-card">
-
     <div class="forecast-header">
-
         <div>
-
-            <h3>
-                7-Day Forecast
-            </h3>
-
-            <p>
-                Weekly weather outlook
-            </p>
-
+            <h3> 7-Day Forecast </h3>
+            <p> Weekly weather outlook </p>
         </div>
-
-        <div class="forecast-badge">
-
-            Predictive View
-
-        </div>
-
+        <div class="forecast-badge"> Predictive View </div>
     </div>
-
     <div class="forecast-scroll">
-
+        @if (isLoading()) {
+        @for (item of [1,2,3,4,5,6,7]; track item) {
+        <div class="forecast-day-skeleton">
+            <div class="skeleton skeleton-day"></div>
+            <div class="skeleton skeleton-condition"></div>
+            <div class="skeleton skeleton-temp"></div>
+        </div>
+        }
+        } @else {
         @for (
         day of forecast();
         track day.day;
         let first = $first
         ) {
-
         <div class="forecast-day" [class.active-day]="first">
 
-            <div class="day-top">
-
-                <span class="day-name">
-
-                    {{ first ? 'Today' : day.day }}
-
-                </span>
-
+            <!-- LEFT -->
+            <div class="forecast-left">
+                <span class="day-name"> {{ first ? 'Today' : day.day }} </span>
                 <div class="weather-icon-wrapper">
-
                     <img [src]="day.icon" [alt]="day.condition">
-
                 </div>
-
             </div>
 
-            <div class="temperature-row">
-
-                <span class="max-temp">
-
-                    {{ day.maxTemp }}
-
-                </span>
-
-                <span class="temp-divider">
-
-                    /
-
-                </span>
-
-                <span class="min-temp">
-
-                    {{ day.minTemp }}
-
-                </span>
-
+            <!-- CENTER -->
+            <div class="forecast-center">
+                <div class="condition-row"> {{ day.condition }} </div>
+                <div class="rain-row">
+                    <span class="rain-icon"> 🌧 </span>
+                    <span> {{ day.rainChance }} </span>
+                </div>
             </div>
 
-            <div class="condition-row">
-
-                {{ day.condition }}
-
+            <!-- RIGHT -->
+            <div class="forecast-right">
+                <span class="max-temp"> {{ day.maxTemp }} </span>
+                <span class="temp-divider"> / </span>
+                <span class="min-temp"> {{ day.minTemp }} </span>
             </div>
-
-            <div class="rain-row">
-
-                <span class="rain-icon">
-
-                    🌧
-
-                </span>
-
-                <span>
-
-                    {{ day.rainChance }}
-
-                    rain chance
-
-                </span>
-
-            </div>
-
         </div>
-
         }
-
+        }
     </div>
-
 </div>

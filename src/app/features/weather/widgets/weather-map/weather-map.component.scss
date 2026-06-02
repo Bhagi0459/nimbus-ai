@@ -1,280 +1,157 @@
 :host {
-
     width: 100%;
-
     display: block;
 }
 
 /* CARD */
 
 .map-card {
-
     position: relative;
-
     overflow: hidden;
-
     width: 100%;
-
     max-width: 1100px;
-
     margin: 0 auto;
-
     padding: 1.15rem;
-
     border-radius: 30px;
-
-    background:
-        linear-gradient(135deg,
-            rgba(20, 28, 48, 0.92),
-            rgba(17, 24, 39, 0.88));
-
-    border:
-        1px solid rgba(255, 255, 255, 0.05);
-
-    backdrop-filter:
-        blur(24px);
-
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.24);
-
-    transition:
-        transform 0.35s ease,
-        border-color 0.35s ease,
-        box-shadow 0.35s ease;
+    background: linear-gradient(135deg, rgba(20, 28, 48, 0.92), rgba(17, 24, 39, 0.88));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.24);
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 /* HOVER */
 
 .map-card:hover {
-
-    transform:
-        translateY(-3px);
-
-    border-color:
-        rgba(96, 165, 250, 0.12);
-
-    box-shadow:
-        0 26px 60px rgba(0, 0, 0, 0.28);
+    transform: translateY(-3px);
+    border-color: rgba(96, 165, 250, 0.12);
+    box-shadow: 0 26px 60px rgba(0, 0, 0, 0.28);
 }
 
 /* ATMOSPHERIC GLOW */
 
 .map-card::before {
-
     content: '';
-
     position: absolute;
-
     inset: 0;
-
-    background:
-
-        radial-gradient(circle at top left,
-            rgba(14, 165, 233, 0.12),
-            transparent 42%),
-
-        radial-gradient(circle at bottom right,
-            rgba(139, 92, 246, 0.10),
-            transparent 40%);
-
-    filter:
-        blur(26px);
-
+    background: radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 42%), radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.10), transparent 40%);
+    filter: blur(26px);
     opacity: 0.9;
-
     pointer-events: none;
 }
 
 /* HEADER */
 
 .map-header {
-
     position: relative;
-
     z-index: 2;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     margin-bottom: 0.9rem;
 }
 
 .map-header h3 {
-
     margin: 0;
-
     font-size: 1.15rem;
-
     font-weight: 700;
-
     color: #f8fafc;
 }
 
 .map-header p {
-
     margin-top: 0.22rem;
-
     font-size: 0.84rem;
-
-    color:
-        rgba(148, 163, 184, 0.76);
+    color: rgba(148, 163, 184, 0.76);
 }
 
 /* STATUS */
 
 .map-status {
-
-    padding:
-        0.4rem 0.75rem;
-
+    padding: 0.4rem 0.75rem;
     border-radius: 999px;
-
-    background:
-        rgba(56, 189, 248, 0.08);
-
-    border:
-        1px solid rgba(56, 189, 248, 0.12);
-
-    color:
-        #7dd3fc;
-
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.12);
+    color: #7dd3fc;
     font-size: 0.76rem;
-
     font-weight: 650;
-
     letter-spacing: 0.04em;
 }
 
 /* MAP */
 
 .weather-map {
-
     position: relative;
-
     z-index: 2;
-
     width: 100%;
-
-    height: 340px;
-
-    min-height: 340px;
-
+    height: 310px;
+    min-height: 310px;
     overflow: hidden;
-
     border-radius: 24px;
-
-    border:
-        1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 /* LEAFLET */
 
 :host ::ng-deep .leaflet-container {
-
-    background:
-        #0f172a;
-
-    font-family:
-        Inter,
-        sans-serif;
+    background: #0f172a;
+    font-family: Inter, sans-serif;
 }
 
 /* REMOVE ATTRIBUTION */
 
 :host ::ng-deep .leaflet-control-attribution {
-
     display: none;
 }
 
 /* MARKER */
 
 :host ::ng-deep .weather-marker {
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 }
 
 /* GLOW */
 
 :host ::ng-deep .marker-glow {
-
     position: absolute;
-
     width: 28px;
-
     height: 28px;
-
     border-radius: 50%;
-
-    background:
-        rgba(56, 189, 248, 0.26);
-
-    animation:
-        pulseGlow 2.2s ease-in-out infinite;
+    background: rgba(56, 189, 248, 0.26);
+    animation: pulseGlow 2.2s ease-in-out infinite;
 }
 
 /* CORE */
 
 :host ::ng-deep .marker-core {
-
     position: relative;
-
     z-index: 2;
-
     width: 12px;
-
     height: 12px;
-
     border-radius: 50%;
-
-    background:
-        #38bdf8;
-
-    border:
-        2px solid white;
-
-    box-shadow:
-        0 0 20px rgba(56, 189, 248, 0.75);
+    background: #38bdf8;
+    border: 2px solid white;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.75);
 }
 
 /* POPUP */
 
 :host ::ng-deep .leaflet-popup-content-wrapper {
-
-    background:
-        rgba(15, 23, 42, 0.96);
-
-    color:
-        #f8fafc;
-
+    background: rgba(15, 23, 42, 0.96);
+    color: #f8fafc;
     border-radius: 16px;
-
-    border:
-        1px solid rgba(255, 255, 255, 0.06);
-
-    backdrop-filter:
-        blur(20px);
-
-    box-shadow:
-        0 16px 34px rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
 }
 
 :host ::ng-deep .leaflet-popup-tip {
-
-    background:
-        rgba(15, 23, 42, 0.96);
+    background: rgba(15, 23, 42, 0.96);
 }
 
 :host ::ng-deep .map-popup {
-
     font-weight: 650;
-
     font-size: 0.92rem;
 }
 
@@ -283,26 +160,17 @@
 @keyframes pulseGlow {
 
     0% {
-
-        transform:
-            scale(1);
-
+        transform: scale(1);
         opacity: 0.65;
     }
 
     50% {
-
-        transform:
-            scale(1.6);
-
+        transform: scale(1.6);
         opacity: 0.18;
     }
 
     100% {
-
-        transform:
-            scale(1);
-
+        transform: scale(1);
         opacity: 0.65;
     }
 }
