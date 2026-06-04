@@ -113,7 +113,8 @@ export class WeatherDashboardComponent implements OnInit {
   readonly windDirection = signal('');
 
   ngOnInit(): void {
-    this.searchCity('Tenali');
+    // this.searchCity('Tenali');
+    this.loadInitialWeather();
   }
 
   @HostListener('document:mousemove', ['$event'])
@@ -190,6 +191,31 @@ export class WeatherDashboardComponent implements OnInit {
     });
   });
 
+  private loadInitialWeather(): void {
+    if (!navigator.geolocation) {
+      this.searchCity('Tenali');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const latitude = position.coords.latitude;
+
+        const longitude = position.coords.longitude;
+
+        this.searchCity(`${latitude},${longitude}`);
+      },
+
+      () => {
+        this.searchCity('Tenali');
+      },
+
+      {
+        timeout: 10000,
+      },
+    );
+  }
+
   async searchCity(city: string): Promise<void> {
     try {
       this.isLoading.set(true);
@@ -233,8 +259,6 @@ export class WeatherDashboardComponent implements OnInit {
       /* DATA */
 
       this.stats.set(weatherData.stats);
-
-      console.log('stats', weatherData.stats);
 
       this.forecast.set(weatherData.forecast);
 
