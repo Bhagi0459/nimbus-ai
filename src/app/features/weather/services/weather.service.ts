@@ -24,11 +24,11 @@ export class WeatherService {
     const response = await firstValueFrom(
       this.http.get<any>(environment.weatherApiUrl, {
         params: {
-          key: environment.weatherApiKey,
-
-          q: city,
-          days: 7,
-          aqi: 'yes',
+          city,
+          // key: environment.weatherApiKey,
+          // q: city,
+          // days: 7,
+          // aqi: 'yes',
         },
       }),
     );
@@ -90,8 +90,7 @@ export class WeatherService {
     const response = await firstValueFrom(
       this.http.get<any[]>(environment.weatherSearchApiUrl, {
         params: {
-          key: environment.weatherApiKey,
-
+          // key: environment.weatherApiKey,
           q: query,
         },
       }),

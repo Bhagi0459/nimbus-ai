@@ -76,6 +76,13 @@
 
     backdrop-filter:
         blur(24px);
+
+    background:
+        linear-gradient(135deg,
+            rgba(20, 28, 48, 0.92),
+            rgba(17, 24, 39, 0.88));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
 }
 
 /* =========================================================
@@ -348,161 +355,381 @@
 }
 
 
-.sunny .floating-glow.glow-1 {
+// .sunny .floating-glow.glow-1 {
 
-    background:
-        radial-gradient(circle,
-            rgba(255, 193, 7, .18),
-            transparent 70%);
+//     background:
+//         radial-gradient(circle,
+//             rgba(255, 193, 7, .18),
+//             transparent 70%);
 
-    width: 500px;
-    height: 500px;
+//     width: 500px;
+//     height: 500px;
 
-    top: -200px;
-    right: -100px;
+//     top: -200px;
+//     right: -100px;
 
-    animation:
-        floatSun 8s ease-in-out infinite;
-}
+//     animation:
+//         floatSun 8s ease-in-out infinite;
+// }
 
-@keyframes floatSun {
+// @keyframes floatSun {
 
-    0%,
-    100% {
-        transform: translateY(0);
-    }
+//     0%,
+//     100% {
+//         transform: translateY(0);
+//     }
 
-    50% {
-        transform: translateY(-20px);
-    }
-}
+//     50% {
+//         transform: translateY(-20px);
+//     }
+// }
 
-.rain-layer {
+// .rain-layer {
 
+//     position: fixed;
+
+//     inset: 0;
+
+//     pointer-events: none;
+
+//     opacity: .15;
+
+//     background-image:
+//         repeating-linear-gradient(100deg,
+//             transparent 0px,
+//             transparent 12px,
+//             rgba(255, 255, 255, .35) 13px,
+//             rgba(255, 255, 255, .35) 14px);
+
+//     animation:
+//         rainMove .5s linear infinite;
+
+//     z-index: 0;
+// }
+
+// @keyframes rainMove {
+
+//     from {
+
+//         transform:
+//             translateY(-20px);
+//     }
+
+//     to {
+
+//         transform:
+//             translateY(20px);
+//     }
+// }
+
+// .cloud-layer {
+
+//     position: fixed;
+
+//     inset: 0;
+
+//     opacity: .08;
+
+//     background:
+//         radial-gradient(circle,
+//             rgba(255, 255, 255, .3),
+//             transparent 70%);
+
+//     animation:
+//         driftClouds 25s linear infinite;
+// }
+
+// @keyframes driftClouds {
+
+//     from {
+//         transform: translateX(-10%);
+//     }
+
+//     to {
+//         transform: translateX(10%);
+//     }
+// }
+
+// .lightning-flash {
+
+//     position: fixed;
+
+//     inset: 0;
+
+//     pointer-events: none;
+
+//     animation:
+//         lightning 8s infinite;
+// }
+
+// @keyframes lightning {
+
+//     0%,
+//     95%,
+//     100% {
+
+//         background: transparent;
+//     }
+
+//     96% {
+
+//         background:
+//             rgba(255, 255, 255, .15);
+//     }
+
+//     97% {
+
+//         background: transparent;
+//     }
+
+//     98% {
+
+//         background:
+//             rgba(255, 255, 255, .25);
+//     }
+// }
+
+// .snowy .weather-particles {
+//     opacity: .15;
+// }
+
+// .cursor-glow {
+
+//     position: fixed;
+
+//     width: 300px;
+//     height: 300px;
+
+//     border-radius: 50%;
+
+//     background:
+//         radial-gradient(circle,
+//             rgba(59, 130, 246, .12),
+//             transparent 70%);
+
+//     pointer-events: none;
+
+//     mix-blend-mode: screen;
+
+//     z-index: 0;
+// }
+
+// .raindrop {
+
+//     width: 2px;
+
+//     height: 24px;
+
+//     opacity: .65;
+
+//     border-radius: 999px;
+
+//     background:
+//         linear-gradient(to bottom,
+//             rgba(255, 255, 255, .05),
+//             rgba(255, 255, 255, .85));
+
+//     filter:
+//         blur(.5px);
+// }
+
+// @keyframes rainfall {
+
+//     from {
+
+//         transform:
+//             translate(-20px, -100px);
+//     }
+
+//     to {
+
+//         transform:
+//             translate(60px, 120vh);
+//     }
+// }
+
+// .rainy {
+
+//     background:
+//         radial-gradient(circle at top,
+//             rgba(59, 130, 246, .15),
+//             transparent 65%);
+// }
+
+// .floating-glow {
+
+//     filter:
+//         blur(120px);
+// }
+
+// .rainy .floating-glow {
+
+//     background:
+//         radial-gradient(circle,
+//             rgba(59, 130, 246, .18),
+//             transparent 70%);
+// }
+
+// .cloud-layer {
+
+//     opacity: .12;
+// }
+
+
+
+/* =========================================================
+   BASE WEATHER ATMOSPHERE
+========================================================= */
+.weather-atmosphere {
     position: fixed;
-
     inset: 0;
-
+    overflow: hidden;
     pointer-events: none;
-
-    opacity: .15;
-
-    background-image:
-        repeating-linear-gradient(100deg,
-            transparent 0px,
-            transparent 12px,
-            rgba(255, 255, 255, .35) 13px,
-            rgba(255, 255, 255, .35) 14px);
-
-    animation:
-        rainMove .5s linear infinite;
-
     z-index: 0;
+    transition: background 1.5s ease-in-out;
 }
 
-@keyframes rainMove {
+/* Background Color States */
+.weather-atmosphere.sunny {
+    background: linear-gradient(to bottom, #0ea5e9, #38bdf8);
+}
 
-    from {
+.weather-atmosphere.rainy {
+    background: linear-gradient(to bottom, #1e293b, #334155);
+}
 
-        transform:
-            translateY(-20px);
+.weather-atmosphere.storm {
+    background: linear-gradient(to bottom, #0f172a, #1e293b);
+}
+
+.weather-atmosphere.cloudy {
+    background: linear-gradient(to bottom, #475569, #94a3b8);
+}
+
+.weather-atmosphere.default {
+    background: #0f172a;
+}
+
+/* =========================================================
+   RAIN EFFECT (Particle based)
+========================================================= */
+.rain-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.raindrop {
+    position: absolute;
+    top: -100px;
+    width: 2px;
+    height: 30px;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.6));
+    border-radius: 999px;
+    animation: rainfall linear infinite;
+    /* Fixed: Added animation here */
+}
+
+@keyframes rainfall {
+    0% {
+        transform: translateY(0) translateX(0);
     }
 
-    to {
-
-        transform:
-            translateY(20px);
+    100% {
+        transform: translateY(110vh) translateX(50px);
     }
 }
 
+/* =========================================================
+   CLOUD EFFECT (Smooth & Layered)
+========================================================= */
 .cloud-layer {
-
-    position: fixed;
-
-    inset: 0;
-
-    opacity: .08;
-
-    background:
-        radial-gradient(circle,
-            rgba(255, 255, 255, .3),
-            transparent 70%);
-
-    animation:
-        driftClouds 25s linear infinite;
+    position: absolute;
+    inset: -100px;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    filter: blur(60px);
+    opacity: 0.4;
 }
 
-@keyframes driftClouds {
+.layer-1 {
+    animation: drift 30s linear infinite;
+}
 
+.layer-2 {
+    animation: drift 50s linear infinite reverse;
+    opacity: 0.2;
+}
+
+@keyframes drift {
     from {
-        transform: translateX(-10%);
+        transform: translateX(-20%) translateY(0);
     }
 
     to {
-        transform: translateX(10%);
+        transform: translateX(20%) translateY(20px);
     }
 }
 
+/* =========================================================
+   LIGHTNING (Sharper & Random feel)
+========================================================= */
 .lightning-flash {
-
     position: fixed;
-
     inset: 0;
-
-    pointer-events: none;
-
-    animation:
-        lightning 8s infinite;
+    z-index: 2;
+    background: white;
+    opacity: 0;
 }
 
-@keyframes lightning {
+.storm .lightning-flash {
+    animation: lightning-strike 10s steps(1) infinite;
+}
+
+@keyframes lightning-strike {
 
     0%,
-    95%,
+    94%,
+    96%,
     100% {
-
-        background: transparent;
+        opacity: 0;
     }
 
-    96% {
+    95% {
+        opacity: 0.3;
+    }
 
-        background:
-            rgba(255, 255, 255, .15);
+    95.5% {
+        opacity: 0.1;
     }
 
     97% {
-
-        background: transparent;
-    }
-
-    98% {
-
-        background:
-            rgba(255, 255, 255, .25);
+        opacity: 0.4;
     }
 }
 
-.snowy .weather-particles {
-    opacity: .15;
+/* =========================================================
+   SUN GLOW
+========================================================= */
+.sunny .floating-glow.glow-1 {
+    background: radial-gradient(circle, rgba(255, 200, 0, 0.3), transparent 70%);
+    width: 600px;
+    height: 600px;
+    top: -100px;
+    right: -100px;
+    filter: blur(80px);
+    animation: sunPulse 10s ease-in-out infinite;
 }
 
-.cursor-glow {
+@keyframes sunPulse {
 
-    position: fixed;
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
 
-    width: 300px;
-    height: 300px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(circle,
-            rgba(59, 130, 246, .12),
-            transparent 70%);
-
-    pointer-events: none;
-
-    mix-blend-mode: screen;
-
-    z-index: 0;
+    50% {
+        transform: scale(1.1);
+        opacity: 0.6;
+    }
 }

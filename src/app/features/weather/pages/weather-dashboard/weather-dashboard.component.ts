@@ -310,4 +310,11 @@ export class WeatherDashboardComponent implements OnInit {
 
     pm10: 0,
   });
+
+  readonly rainDrops = Array.from({ length: 120 }, (_, index) => ({
+    id: index,
+    left: Math.random() * 100,
+    delay: Math.random() * 2,
+    duration: 1 + Math.random(),
+  }));
 }

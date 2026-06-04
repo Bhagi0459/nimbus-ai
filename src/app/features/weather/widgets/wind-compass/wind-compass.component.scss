@@ -11,6 +11,12 @@
     border: 1px solid rgba(255, 255, 255, .08);
     display: flex;
     align-items: center;
+    background:
+        linear-gradient(135deg,
+            rgba(20, 28, 48, 0.92),
+            rgba(17, 24, 39, 0.88));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
 }
 
 .wind-content {

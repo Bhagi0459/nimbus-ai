@@ -1,17 +1,43 @@
 <div class="weather-atmosphere" [ngClass]="backgroundClass()">
 
+    @if (backgroundClass() === 'rainy' || backgroundClass() === 'storm') {
+    <div class="rain-layer">
+        @for (drop of rainDrops; track drop.id) {
+        <span class="raindrop" [style.left.%]="drop.left" [style.animation-delay.s]="drop.delay"
+            [style.animation-duration.s]="drop.duration">
+        </span>
+        }
+    </div>
+    }
+
+    <!-- SUN -->
+    @if (backgroundClass() === 'sunny') {
+    <div class="floating-glow glow-1"></div>
+    }
+
+    <!-- CLOUDS -->
+    @if (['cloudy', 'rainy', 'storm'].includes(backgroundClass())) {
+    <div class="cloud-layer layer-1"></div>
+    <div class="cloud-layer layer-2"></div>
+    }
+
+    <!-- LIGHTNING -->
+    @if (backgroundClass() === 'storm') {
+    <div class="lightning-flash"></div>
+    }
+
     <div class="floating-glow glow-1"></div>
     <div class="floating-glow glow-2"></div>
 
     <div class="weather-particles"></div>
 
-    @if (backgroundClass() === 'rainy') {
+    <!-- @if (backgroundClass() === 'rainy') {
 
     <div class="rain-layer"></div>
 
-    }
+    } -->
 
-    @if (backgroundClass() === 'storm') {
+    <!-- @if (backgroundClass() === 'storm') {
 
     <div class="lightning-flash"></div>
 
@@ -35,7 +61,7 @@
 
     <div class="sun-particles"></div>
 
-    }
+    } -->
 
 </div>
 
