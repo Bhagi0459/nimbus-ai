@@ -1,59 +1,123 @@
-# NimbusAi
+# 🌦️ Nimbus AI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.26.
+Nimbus AI is a modern weather intelligence dashboard built using Angular 19 and Express.js. It combines real-time weather data, AI-powered insights, interactive visualizations, and a premium user experience.
 
-## Development server
+## 🚀 Live Demo
 
-To start a local development server, run:
+**Frontend:**
+https://nimbus-ai-phi.vercel.app/
+
+**Backend API:**
+https://nimbus-ai-api.onrender.com/
+
+> Note: The backend is hosted on Render's free tier and may take a few seconds to wake up after inactivity.
+
+---
+
+## ✨ Features
+
+* 🌍 Real-time weather search
+* 🤖 AI-powered weather insights using Groq
+* 📈 Interactive temperature trends with ApexCharts
+* 🗺️ Weather map integration using Leaflet
+* 🌬️ Wind compass visualization
+* 🌫️ Air Quality Index (AQI) monitoring
+* 📅 7-Day weather forecast
+* ⏰ Hourly forecast timeline
+* 🌦️ Dynamic weather backgrounds and effects
+* 💀 Skeleton loaders for smooth loading states
+* 🔒 Secure API integration through Express backend
+* ⚙️ Environment-based configuration
+* 🚀 CI/CD using GitHub Actions, Render, and Vercel
+
+---
+
+## 🏗️ Architecture
+
+Frontend (Angular 19)
+↓
+Express.js Backend
+↓
+WeatherAPI + Groq AI
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* Angular 19
+* TypeScript
+* Signals
+* SCSS
+* ApexCharts
+* Leaflet
+* Lucide Icons
+
+### Backend
+
+* Express.js
+* Node.js
+* Groq SDK
+* dotenv
+* CORS
+
+### DevOps
+
+* GitHub Actions
+* Render
+* Vercel
+
+---
+
+## ⚡ Getting Started
+
+### Frontend
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```txt
+http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Backend
 
 ```bash
-ng generate --help
+cd server
+npm install
+npm run dev
 ```
 
-## Building
+Create a `.env` file inside the `server` folder:
 
-To build the project run:
-
-```bash
-ng build
+```env
+GROQ_API_KEY=your_groq_api_key
+WEATHER_API_KEY=your_weather_api_key
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Backend runs at:
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+```txt
+http://localhost:3000
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## 🚀 Deployment
 
-```bash
-ng e2e
-```
+* Frontend deployed on Vercel
+* Backend deployed on Render
+* Automated build validation using GitHub Actions
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 👨‍💻 Author
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Bhagya Sankar Maddela**
+
+Built to showcase modern Angular development practices, backend integration, AI capabilities, and end-to-end deployment workflows.
