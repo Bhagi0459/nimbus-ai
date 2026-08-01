@@ -1,14 +1,19 @@
 <div class="daily-forecast-card">
     <div class="forecast-header">
         <div>
+            <!-- Old heading, from when WeatherAPI's free tier allowed 7 days:
             <h3> 7-Day Forecast </h3>
             <p> Weekly weather outlook </p>
+            -->
+            <h3> {{ forecast().length || 3 }}-Day Forecast </h3>
+            <p> Upcoming weather outlook </p>
         </div>
         <div class="forecast-badge"> Predictive View </div>
     </div>
     <div class="forecast-scroll">
         @if (isLoading()) {
-        @for (item of [1,2,3,4,5,6,7]; track item) {
+        <!-- Old skeleton count matched the old 7-day forecast: [1,2,3,4,5,6,7] -->
+        @for (item of [1,2,3]; track item) {
         <div class="forecast-day-skeleton">
             <div class="skeleton skeleton-day"></div>
             <div class="skeleton skeleton-condition"></div>

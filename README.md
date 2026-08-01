@@ -22,7 +22,7 @@ https://nimbus-ai-api.onrender.com/
 * 🗺️ Weather map integration using Leaflet
 * 🌬️ Wind compass visualization
 * 🌫️ Air Quality Index (AQI) monitoring
-* 📅 7-Day weather forecast
+* 📅 3-Day weather forecast <!-- was: 7-Day weather forecast, before WeatherAPI's free-tier limit changed -->
 * ⏰ Hourly forecast timeline
 * 🌦️ Dynamic weather backgrounds and effects
 * 💀 Skeleton loaders for smooth loading states

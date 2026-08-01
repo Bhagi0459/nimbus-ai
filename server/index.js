@@ -148,12 +148,20 @@ app.post(
     }
 );
 
+// WeatherAPI's free tier caps forecast lookahead at 3 days (was 7 previously).
+const FORECAST_DAYS = 3;
+
 app.get('/api/weather', async (req, res) => {
     try {
         const city = req.query.city;
 
+        // Old (pre free-tier change) request — kept for reference:
+        // const response = await fetch(
+        //     `https://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&q=${city}&days=7&aqi=yes`
+        // );
+
         const response = await fetch(
-            `https://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&q=${city}&days=7&aqi=yes`
+            `https://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&q=${city}&days=${FORECAST_DAYS}&aqi=yes`
         );
 
         const data = await response.json();
