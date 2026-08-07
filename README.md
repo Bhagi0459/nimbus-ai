@@ -22,11 +22,15 @@ https://nimbus-ai-api.onrender.com/
 * 🗺️ Weather map integration using Leaflet
 * 🌬️ Wind compass visualization
 * 🌫️ Air Quality Index (AQI) monitoring
-* 📅 3-Day weather forecast <!-- was: 7-Day weather forecast, before WeatherAPI's free-tier limit changed -->
+* 📅 3-Day weather forecast
 * ⏰ Hourly forecast timeline
+* 🕓 Recently searched cities remembered locally
+* ⏳ Friendly heads-up while the free-tier backend wakes up
 * 🌦️ Dynamic weather backgrounds and effects
 * 💀 Skeleton loaders for smooth loading states
 * 🔒 Secure API integration through Express backend
+* 🛡️ Response caching and rate limiting to protect API quotas
+* ✅ Automated unit tests for the weather data mapping logic
 * ⚙️ Environment-based configuration
 * 🚀 CI/CD using GitHub Actions, Render, and Vercel
 
@@ -61,6 +65,7 @@ WeatherAPI + Groq AI
 * Groq SDK
 * dotenv
 * CORS
+* express-rate-limit
 
 ### DevOps
 
@@ -113,6 +118,15 @@ http://localhost:3000
 * Frontend deployed on Vercel
 * Backend deployed on Render
 * Automated build validation using GitHub Actions
+
+---
+
+## 📚 Documentation
+
+A full engineering write-up — architecture, the backend line by line, the
+frontend's Signal-based state, every widget, deployment, and a glossary of
+every term used — lives in [`docs/`](./docs/README.md), written to be
+followable by any developer picking up this codebase for the first time.
 
 ---
 

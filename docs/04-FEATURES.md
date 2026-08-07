@@ -24,6 +24,12 @@ actually presses Enter or clicks a suggestion), keeping "show suggestions
 as-you-type" and "actually perform a full weather search" as two clearly
 separate actions.
 
+When the input is empty and there's no suggestions dropdown open, it also
+shows a row of small chips for the last few cities that were searched
+(see "Remembering recently searched cities" in
+[03-FRONTEND.md](./03-FRONTEND.md)) — clicking one re-runs that search
+instantly, the same as clicking an autocomplete suggestion.
+
 ## Stat Card
 
 **File:** `widgets/stat-card`. Renders the row of small stat tiles — Humidity,
@@ -44,23 +50,21 @@ deliberately filters out hours that have already passed:
 ```
 
 so the timeline always starts from "now," never showing hours from earlier
-today that have already gone by.
+today that have already gone by. This filtering logic is covered by an
+automated test — see "Testing the mapping logic" in
+[03-FRONTEND.md](./03-FRONTEND.md).
 
-## Daily Forecast — recently updated for WeatherAPI's new free-tier limit
+## Daily Forecast
 
-**File:** `widgets/daily-forecast`. Originally labeled "7-Day Forecast," backed
-by requesting `days=7` from WeatherAPI. **WeatherAPI's free tier now caps
-forecast lookahead at 3 days**, so both sides of this were updated to match:
-
-- The backend now requests `days=3` (see the `FORECAST_DAYS` constant in
-  [02-BACKEND.md](./02-BACKEND.md)).
-- The heading is no longer hardcoded text — it now reads
-  `{{ forecast().length || 3 }}-Day Forecast`, deriving the number directly from
-  how many days actually came back, so it can never silently go stale again if
-  the plan (or WeatherAPI's limit) changes in the future.
-- The loading-skeleton placeholder row count was changed from seven items to
-  three, so the loading state and the loaded state show the same number of rows
-  instead of visibly shrinking once real data arrives.
+**File:** `widgets/daily-forecast`. WeatherAPI's free tier caps forecast
+lookahead at 3 days, so both sides of this widget were built to match rather
+than hardcode a number that could silently go stale: the backend requests
+`days=3` (see the `FORECAST_DAYS` constant in
+[02-BACKEND.md](./02-BACKEND.md)), and the heading reads
+`{{ forecast().length || 3 }}-Day Forecast`, deriving the number directly from
+how many days actually came back. The loading-skeleton placeholder shows the
+same number of rows as the real data, so the layout doesn't visibly shrink
+once it loads.
 
 ## Temperature Chart
 
@@ -123,24 +127,28 @@ Randomizing each drop's horizontal position, animation delay, and fall duration
 individually is what keeps 120 identical CSS animations from looking like an
 obviously repeating pattern.
 
+## "Waking up the server" banner
+
+A small banner that appears above the search bar only when a search is taking
+longer than 4 seconds — see "Hinting when Render's free tier is waking up" in
+[03-FRONTEND.md](./03-FRONTEND.md) for exactly how it's triggered. It exists
+purely to explain an otherwise-confusing delay: without it, the free-tier
+backend's cold-start pause (see [05-DEPLOYMENT.md](./05-DEPLOYMENT.md)) looks
+indistinguishable from the app being broken.
+
 ## Skeleton loaders
 
 Every widget accepts an `isLoading` input and renders a skeleton (pulsing
 placeholder shapes matching its real layout) while true, matching a common
-pattern for "the layout doesn't jump once real data replaces the placeholder" —
-which is exactly why the daily-forecast skeleton's row count needed to match its
-real row count after the 3-day fix above.
+pattern for "the layout doesn't jump once real data replaces the placeholder."
 
-## Favicon — recently fixed
+## Favicon
 
-The project's `public/favicon.ico` was still Angular CLI's default scaffolded
-icon (the Angular "A" shield) — nothing in the repo had ever replaced it with
-branding for Nimbus AI. This has been fixed: `public/favicon.svg` is a small,
-hand-authored cloud icon (a layered blue cloud with a subtle sparkle accent, on
-the same dark navy used as the dashboard's own background) referenced as the
-primary icon in `src/index.html`, with a matching custom `favicon.ico`
-(previously the Angular default) kept as a fallback for the rare browser that
-doesn't support SVG favicons.
+`public/favicon.svg` is a small, hand-authored cloud icon (a layered blue
+cloud with a subtle sparkle accent, on the same dark navy used as the
+dashboard's own background) referenced as the primary icon in
+`src/index.html`, with a matching `favicon.ico` kept as a fallback for the
+rare browser that doesn't support SVG favicons.
 
 Next: [05-DEPLOYMENT.md](./05-DEPLOYMENT.md) — Vercel, Render, and GitHub
 Actions.
