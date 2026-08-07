@@ -16,6 +16,16 @@
         </button>
     </div>
 
+    @if (!cityName() && suggestions().length === 0 && recentCities().length > 0) {
+    <div class="recent-cities">
+        @for (recent of recentCities(); track recent) {
+        <button type="button" class="recent-chip" (click)="searchCityFromSuggestion(recent)">
+            {{ recent }}
+        </button>
+        }
+    </div>
+    }
+
     @if (suggestions().length > 0) {
     <div class="suggestions-dropdown">
         @for (

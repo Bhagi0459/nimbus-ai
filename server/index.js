@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const Groq = require('groq-sdk');
 const app = express();
 const groq = new Groq({
@@ -12,6 +13,44 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+// Public proxy, no auth — this caps how hard any one client can hit our
+// WeatherAPI/Groq keys instead of leaving the quota fully open.
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 60,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again later.' },
+});
+
+app.use(['/api/', '/weather-insight'], apiLimiter);
+
+// Simple in-memory TTL cache so repeat searches for the same city/query
+// don't re-hit WeatherAPI. Fine for a single Node instance with no DB.
+const cache = new Map();
+
+function getCached(key) {
+    const entry = cache.get(key);
+
+    if (!entry) {
+        return null;
+    }
+
+    if (Date.now() - entry.expiresAt > 0) {
+        cache.delete(key);
+        return null;
+    }
+
+    return entry.data;
+}
+
+function setCached(key, data, ttlMs) {
+    cache.set(key, {
+        data,
+        expiresAt: Date.now() + ttlMs,
+    });
+}
 
 app.get(
     '/',
@@ -151,9 +190,19 @@ app.post(
 // WeatherAPI's free tier caps forecast lookahead at 3 days (was 7 previously).
 const FORECAST_DAYS = 3;
 
+const WEATHER_CACHE_TTL_MS = 10 * 60 * 1000;
+const SEARCH_CACHE_TTL_MS = 60 * 60 * 1000;
+
 app.get('/api/weather', async (req, res) => {
     try {
         const city = req.query.city;
+        const cacheKey = `weather:${city}`.toLowerCase();
+
+        const cached = getCached(cacheKey);
+
+        if (cached) {
+            return res.json(cached);
+        }
 
         // Old (pre free-tier change) request — kept for reference:
         // const response = await fetch(
@@ -165,6 +214,8 @@ app.get('/api/weather', async (req, res) => {
         );
 
         const data = await response.json();
+
+        setCached(cacheKey, data, WEATHER_CACHE_TTL_MS);
 
         res.json(data);
     } catch (error) {
@@ -179,12 +230,21 @@ app.get('/api/weather', async (req, res) => {
 app.get('/api/weather/search', async (req, res) => {
     try {
         const query = req.query.q;
+        const cacheKey = `search:${query}`.toLowerCase();
+
+        const cached = getCached(cacheKey);
+
+        if (cached) {
+            return res.json(cached);
+        }
 
         const response = await fetch(
             `https://api.weatherapi.com/v1/search.json?key=${process.env.WEATHER_API_KEY}&q=${query}`
         );
 
         const data = await response.json();
+
+        setCached(cacheKey, data, SEARCH_CACHE_TTL_MS);
 
         res.json(data);
     } catch (error) {

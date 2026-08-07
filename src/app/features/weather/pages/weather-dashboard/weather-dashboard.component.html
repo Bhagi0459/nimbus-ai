@@ -73,9 +73,15 @@
 
     <div class="dashboard-search">
 
-        <app-weather-search [isLoading]="isLoading()" [suggestions]="suggestions()" (search)="searchCity($event)"
-            (searchInputChange)="searchSuggestions($event)">
+        <app-weather-search [isLoading]="isLoading()" [suggestions]="suggestions()" [recentCities]="recentCities()"
+            (search)="searchCity($event)" (searchInputChange)="searchSuggestions($event)">
         </app-weather-search>
+
+        @if (isWakingBackend()) {
+        <div class="wake-banner">
+            Waking up the server — first request after inactivity can take up to 30 seconds.
+        </div>
+        }
 
     </div>
 

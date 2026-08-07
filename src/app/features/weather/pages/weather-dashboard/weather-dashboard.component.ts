@@ -112,6 +112,20 @@ export class WeatherDashboardComponent implements OnInit {
 
   readonly windDirection = signal('');
 
+  private readonly RECENT_CITIES_KEY = 'nimbus-recent-cities';
+
+  private readonly MAX_RECENT_CITIES = 5;
+
+  readonly recentCities = signal<string[]>(this.loadRecentCities());
+
+  /* Render's free tier spins the backend down after inactivity — a cold
+   * request can take several seconds, which otherwise just looks stuck. */
+  private readonly WAKE_HINT_DELAY_MS = 4000;
+
+  private wakeHintTimer?: ReturnType<typeof setTimeout>;
+
+  readonly isWakingBackend = signal(false);
+
   ngOnInit(): void {
     // this.searchCity('Tenali');
     this.loadInitialWeather();
@@ -222,6 +236,14 @@ export class WeatherDashboardComponent implements OnInit {
 
       this.isInsightLoading.set(true);
 
+      this.isWakingBackend.set(false);
+
+      clearTimeout(this.wakeHintTimer);
+
+      this.wakeHintTimer = setTimeout(() => {
+        this.isWakingBackend.set(true);
+      }, this.WAKE_HINT_DELAY_MS);
+
       /* CLEAR OLD DATA */
 
       this.forecast.set([]);
@@ -245,6 +267,8 @@ export class WeatherDashboardComponent implements OnInit {
       /* HERO */
 
       this.city.set(weatherData.city);
+
+      this.saveRecentCity(weatherData.city);
 
       this.temperature.set(weatherData.temperature);
 
@@ -302,6 +326,40 @@ export class WeatherDashboardComponent implements OnInit {
       this.isInsightLoading.set(false);
     } finally {
       this.isLoading.set(false);
+
+      clearTimeout(this.wakeHintTimer);
+
+      this.isWakingBackend.set(false);
+    }
+  }
+
+  private loadRecentCities(): string[] {
+    try {
+      const stored = localStorage.getItem(this.RECENT_CITIES_KEY);
+
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  private saveRecentCity(city: string): void {
+    const withoutDuplicate = this.recentCities().filter(
+      (existing) => existing.toLowerCase() !== city.toLowerCase(),
+    );
+
+    const updated = [city, ...withoutDuplicate].slice(
+      0,
+      this.MAX_RECENT_CITIES,
+    );
+
+    this.recentCities.set(updated);
+
+    try {
+      localStorage.setItem(this.RECENT_CITIES_KEY, JSON.stringify(updated));
+    } catch {
+      /* localStorage unavailable (e.g. private browsing) — recent cities
+       * just won't persist across reloads, nothing else depends on it. */
     }
   }
 

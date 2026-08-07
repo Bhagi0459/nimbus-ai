@@ -13,6 +13,7 @@ export class WeatherSearchComponent {
   readonly search = output<string>();
   readonly isLoading = input(false);
   readonly suggestions = input<CitySuggestion[]>([]);
+  readonly recentCities = input<string[]>([]);
   readonly searchInputChange = output<string>();
 
   updateCity(event: Event): void {

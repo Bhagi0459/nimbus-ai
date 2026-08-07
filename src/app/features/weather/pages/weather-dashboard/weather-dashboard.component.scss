@@ -708,6 +708,22 @@
 }
 
 /* =========================================================
+   WAKE-UP BANNER (Render free-tier cold start)
+========================================================= */
+
+.wake-banner {
+    max-width: 900px;
+    margin: -.5rem auto .5rem;
+    padding: .6rem 1rem;
+    border-radius: 14px;
+    text-align: center;
+    font-size: .85rem;
+    color: #fde68a;
+    background: rgba(217, 119, 6, .12);
+    border: 1px solid rgba(217, 119, 6, .24);
+}
+
+/* =========================================================
    SUN GLOW
 ========================================================= */
 .sunny .floating-glow.glow-1 {
