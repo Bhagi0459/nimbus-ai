@@ -11,6 +11,11 @@ const groq = new Groq({
 
 const PORT = process.env.PORT || 3000;
 
+// Render (and most PaaS hosts) put the app behind a reverse proxy that sets
+// X-Forwarded-For. Without this, express-rate-limit can't safely derive the
+// real client IP and throws on every request instead of rate-limiting.
+app.set('trust proxy', 1);
+
 app.use(cors());
 app.use(express.json());
 
